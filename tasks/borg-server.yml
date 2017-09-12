@@ -23,8 +23,9 @@
 
 - name: server | create directories
   file:
-    path: "{{ item.pool }}"
+    path: "{{ item.home}}{{ item.pool }}"
     state: "directory"
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
     mode: "0770"
+  with_items: "{{ backupservers }}"
