@@ -34,7 +34,7 @@ Allows to override backup servers on group or host level.
 Define a borg\_passphrase for every host.
 host\_vars\client1:
 ```
-borg\_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
+borg_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
 ```
 
 *Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup_include.* Override this in your inventory where required.
@@ -43,8 +43,8 @@ borg\_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
 
 Configure Borg on the server and on a client:
 ```
-ansible-playbook -i inventory/test playbooks/backup.yml -l backup1.fiaas.co
-ansible-playbook -i inventory/test playbooks/backup.yml -l client1.fiaas.co
+ansible-playbook -i inventory/test backup.yml -l backup1.fiaas.co
+ansible-playbook -i inventory/test backup.yml -l client1.fiaas.co
 ```
 
 ## Further reading
