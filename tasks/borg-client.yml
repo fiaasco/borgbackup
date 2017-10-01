@@ -11,7 +11,7 @@
   lineinfile:
     dest: "/root/.borg.passphrase"
     state: "present"
-    line: 'export BORG_PASSPHRASE="{{ borg_passphrase }}"'
+    line: 'export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"'
     create: "yes"
 
 - name: client | template sshconfig for backup-hosts (no strict key checking)

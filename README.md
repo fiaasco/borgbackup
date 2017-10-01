@@ -4,7 +4,7 @@ The role supports both self hosted and rsync.net as Borg server.
 
 
 ## Required variables
-Define a group backupservers in your inventory with one or multiple hosts. The default location where the backups will be saved is /var/backup/repos/.
+Define a group backupservers in your inventory with one or multiple hosts.
 ```
 infra:
 [backupservers]
@@ -34,7 +34,7 @@ Allows to override backup servers on group or host level.
 Define a borg\_passphrase for every host.
 host\_vars\client1:
 ```
-borg_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
+borgbackup_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
 ```
 
 *Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup_include.* Override this in your inventory where required.

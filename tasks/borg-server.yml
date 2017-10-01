@@ -2,11 +2,11 @@
 - name: server | install borg backup
   get_url:
     dest: "/usr/local/bin/borg"
-    checksum: "{{ borg_checksum }}"
+    checksum: "{{ borgbackup_checksum }}"
     owner: "root"
     group: "root"
     mode: "0755"
-    url: "{{ borg_download_url }}"
+    url: "{{ borgbackup_download_url }}"
   delegate_to: "{{ item.fqdn }}"
   with_items: "{{ backupservers }}"
   when: item.type == 'normal'

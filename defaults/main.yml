@@ -1,24 +1,26 @@
 ---
-backup_required: True
-restore: False
+borgbackup_required: True
+borgbackup_do_restore: False
 
-borg_version: "1.0.11"
-borg_checksum: "sha256:fbdc0e0d6d05a0935551f2f408f370236a76b7a30d3bb90a31c3628fe3611359"
-borg_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borg_version }}/borg-linux64"
+borgbackup_version: "1.0.11"
+borgbackup_checksum: "sha256:fbdc0e0d6d05a0935551f2f408f370236a76b7a30d3bb90a31c3628fe3611359"
+borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"
 
-backup_pre_commands:
+borgbackup_pre_commands:
   - '[[ ! -f "/usr/sbin/automysqlbackup" ]] || /usr/sbin/automysqlbackup'
 
-backup_include:
+borgbackup_include:
   - "/etc"
   - "/home"
   - "/root"
   - "/var/www"
   - "/var/log"
 
-retention:
+borgbackup_retention:
   hourly: 12
   daily: 7
   weekly: 4
   monthly: 6
   yearly: 1
+
+borgbackup_management_station: ''
