@@ -22,6 +22,11 @@ borgbackup_retention:
   monthly: 6
   yearly: 1
 
+borgbackup_cron_user: root
+borgbackup_cron_day: "*"
+borgbackup_cron_hour: "{{ 59|random }}"
+borgbackup_cron_minute: "{{ 5|random }}"
+
 borgbackup_appendonly: False
 borgbackup_management_station: ''
 borgbackup_management_user: ''

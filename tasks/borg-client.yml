@@ -89,10 +89,11 @@
 - name: client | create backup cronjob
   cron:
     cron_file: "borg-backup"
-    user: "root"
+    user: "{{ borgbackup_cron_user }}"
     name: "borg-backup"
-    minute: "{{ 59|random }}"
-    hour: "{{ 5|random }}"
+    minute: "{{ borgbackup_cron_minute }}"
+    hour: "{{ borgbackup_cron_hour }}"
+    day: "{{ borgbackup_cron_day }}"
     job: "/usr/local/bin/borg-backup backup"
 
 - name: client | disable automysqlbackup cronjob, it's in our pre-backup-tasks 
