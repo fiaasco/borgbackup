@@ -1,5 +1,4 @@
 ---
-
 - include: install.yml
   when: >
     borgbackup_required == True or
@@ -11,4 +10,9 @@
 - include: borg-client.yml
   when: >
     borgbackup_required == True and
+    inventory_hostname not in groups.backupservers
+
+- include: management.yml
+  when: >
+    inventory_hostname in groups.borgbackup_management and
     inventory_hostname not in groups.backupservers

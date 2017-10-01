@@ -2,6 +2,7 @@
 This role installs Borg backup on backupservers and clients. The role contains a wrapper-script 'borg-backup' to ease the usage on the client. Supported options include borg-backup info | init | list | backup | mount. Automysqlbackup will run as pre-backup command if it's installed.
 The role supports both self hosted and rsync.net as Borg server.
 
+It's possible to configure append-only repositories to secure the backups against deletion from the client.
 
 ## Required variables
 Define a group backupservers in your inventory with one or multiple hosts.
@@ -9,6 +10,9 @@ Define a group backupservers in your inventory with one or multiple hosts.
 infra:
 [backupservers]
 backup1.fiaas.co
+
+[borgbackup_management]
+supersecurehost
 ```
 
 group\_vars/all.yml:
@@ -36,6 +40,8 @@ host\_vars\client1:
 ```
 borgbackup_passphrase: Ahl9EiNohr5koosh1Wohs3Shoo3ooZ6p
 ```
+
+Set borgbackup\_appendonly: True in host or group vars if you want append-only repositories. In that case it's possible to define a hostname in borgbackup\_management\_station where a borg prune script will be configured.
 
 *Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup_include.* Override this in your inventory where required.
 

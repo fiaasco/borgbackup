@@ -22,4 +22,7 @@ borgbackup_retention:
   monthly: 6
   yearly: 1
 
+borgbackup_appendonly: False
 borgbackup_management_station: ''
+borgbackup_management_user: ''
+borgbackup_management_sshkey: ''

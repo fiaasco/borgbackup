@@ -1,0 +1,55 @@
+---
+- name: management | put management station prune script
+  template:
+    src: prune.sh.j2
+    dest: "~{{ borgbackup_management_user }}/prune.sh"
+    owner: "{{ borgbackup_management_user }}"
+    group: "{{ borgbackup_management_user }}"
+    mode: 0700
+
+- name: management | put management sshpubkey on the normal backupserver
+  authorized_key:
+    user: "{{ item.user }}"
+    key: "{{ borgbackup_management_sshkey }}"
+  delegate_to: "{{ item.fqdn }}"
+  when: item.type == 'normal'
+  with_items: "{{ backupservers }}"
+
+
+# rsync.net has no python, so we can only use raw to manage ssh keys - workaround with local tmp file
+- name: management | get rsync.net authorized_keys file
+  raw: scp {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys /tmp/rsync.net-{{ item.fqdn }}-authkeys
+  delegate_to: localhost
+  become: no
+  when: item.type == 'rsync.net'
+  with_items: "{{ backupservers }}"
+  changed_when: false
+
+- name: management | modify local rsync.net authorized_keys
+  authorized_key:
+    user: "{{ ansible_user_id }}"
+    key: "{{ borgbackup_management_sshkey }}"
+    path: "/tmp/rsync.net-{{ item.fqdn }}-authkeys"
+    manage_dir: no
+  delegate_to: localhost
+  become: no
+  when: item.type == 'rsync.net'
+  with_items: "{{ backupservers }}"
+  register: authkeys
+
+- name: management | upload local authorized_keys to rsync.net
+  raw: scp /tmp/rsync.net-{{ item.fqdn }}-authkeys {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys
+  delegate_to: localhost
+  become: no
+  when: item.type == 'rsync.net' and authkeys.changed
+  with_items: "{{ backupservers }}"
+
+- name: management | remove tmp authorized_keys files
+  file:
+    path: /tmp/rsync.net-{{ item.fqdn }}-authkeys
+    state: absent
+  delegate_to: localhost
+  become: no
+  with_items: "{{ backupservers }}"
+  when: authkeys.changed
+  changed_when: false
