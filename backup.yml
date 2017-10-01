@@ -1,7 +1,7 @@
 ---
 
 - name: Configure Borg backup
-  hosts: all:
+  hosts: all
   become: True
 
   roles:
