@@ -5,9 +5,9 @@
 # Don't put it on the backup server, it contains all borg secrets!
 
 {% for h in groups['all'] %}
-  {% if hostvars[h].borgbackup_required is defined and hostvars[h].borgbackup_required %}
+  {% if hostvars[h].borgbackup_required | default(True) %}
       # Host: {{ h }}
-    {% for b in hostvars[h].backupservers %}
+    {% for b in hostvars[h].borgbackup_servers %}
       {% if hostvars[h].borgbackup_managementstation is defined and inventory_hostname == hostvars[h].borgbackup_managementstation %}
       export BORG_PASSPHRASE={{ hostvars[h].borgbackup_passphrase }}
       REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ h }}

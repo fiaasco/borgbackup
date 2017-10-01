@@ -8,7 +8,7 @@
     mode: "0755"
     url: "{{ borgbackup_download_url }}"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ backupservers }}"
+  with_items: "{{ borgbackup_servers }}"
   when: item.type == 'normal'
 
 - name: server | create user
@@ -18,7 +18,7 @@
     home: "{{ item.home }}"
     createhome: "yes"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ backupservers }}"
+  with_items: "{{ borgbackup_servers }}"
   when: item.type == 'normal'
 
 - name: server | create directories
@@ -28,4 +28,4 @@
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
     mode: "0770"
-  with_items: "{{ backupservers }}"
+  with_items: "{{ borgbackup_servers }}"
