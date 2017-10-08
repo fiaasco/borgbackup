@@ -43,7 +43,7 @@
   authorized_key:
     user: "{{ ansible_user_id }}"
     key: "{{ sshkey.stdout }}"
-    key_options: 'command="cd {{ item.home }}{{ item.pool }}/{{ inventory_hostname }};borg serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.home }}/{{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'
+    key_options: 'command="cd {{ item.pool }}/{{ inventory_hostname }};/usr/local/bin/borg1 serve {% if borgbackup_appendonly %}--append-only {% endif %} --restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'
     path: "/tmp/rsync.net-{{ item.fqdn }}-authkeys"
     manage_dir: no
   delegate_to: localhost
