@@ -49,8 +49,8 @@ Per default the role creates a cronjob in /etc/cron.d/borg-backup running as roo
 ```
 borgbackup_cron_user: root
 borgbackup_cron_day: "*"
-borgbackup_cron_hour: "{{ 59|random }}"
-borgbackup_cron_minute: "{{ 5|random }}"
+borgbackup_cron_minute: "{{ 59|random }}"
+borgbackup_cron_hour: "{{ 5|random }}"
 ```
 
 Set borgbackup\_appendonly: True in host or group vars if you want append-only repositories. In that case it's possible to define a hostname in borgbackup\_management\_station where a borg prune script will be configured.
