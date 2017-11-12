@@ -1,8 +1,0 @@
-# backup hosts
-{% for b in borgbackup_servers %}
-Host {{ b.fqdn }}
-   StrictHostKeyChecking no
-   {% if b.port is defined %}
-   Port {{ b.port }}
-   {% endif %}
-{% endfor %}

@@ -10,7 +10,7 @@
 - name: management | put management sshpubkey on the normal backupserver
   authorized_key:
     user: "{{ item.user }}"
-    key: "{{ borgbackup_management_sshkey }}"
+    key: "{{ borgbackup_management_ssh_pubkey }}"
   delegate_to: "{{ item.fqdn }}"
   when: item.type == 'normal'
   with_items: "{{ borgbackup_servers }}"
@@ -28,7 +28,7 @@
 - name: management | modify local rsync.net authorized_keys
   authorized_key:
     user: "{{ ansible_user_id }}"
-    key: "{{ borgbackup_management_sshkey }}"
+    key: "{{ borgbackup_management_ssh_pubkey }}"
     path: "/tmp/rsync.net-{{ item.fqdn }}-authkeys"
     manage_dir: no
   delegate_to: localhost

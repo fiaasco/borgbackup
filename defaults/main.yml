@@ -1,6 +1,8 @@
 ---
 borgbackup_required: True
 
+borgbackup_ssh_key: "~/.ssh/id_borg_rsa"
+
 borgbackup_version: "1.0.11"
 borgbackup_checksum: "sha256:fbdc0e0d6d05a0935551f2f408f370236a76b7a30d3bb90a31c3628fe3611359"
 borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"
@@ -30,4 +32,4 @@ borgbackup_cron_minute: "{{ 59|random }}"
 borgbackup_appendonly: False
 borgbackup_management_station: ''
 borgbackup_management_user: ''
-borgbackup_management_sshkey: ''
+borgbackup_management_ssh_pubkey: ''
