@@ -1,16 +1,4 @@
 ---
-- name: server | install borg backup
-  get_url:
-    dest: "/usr/local/bin/borg"
-    checksum: "{{ borgbackup_checksum }}"
-    owner: "root"
-    group: "root"
-    mode: "0755"
-    url: "{{ borgbackup_download_url }}"
-  delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ borgbackup_servers }}"
-  when: item.type == 'normal'
-
 - name: server | create user
   user:
     name: "{{ item.user }}"
@@ -28,4 +16,5 @@
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
     mode: "0770"
+  delegate_to: "{{ item.fqdn }}"
   with_items: "{{ borgbackup_servers }}"
