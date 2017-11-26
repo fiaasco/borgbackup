@@ -22,6 +22,7 @@
     content: |
       Host {{ item.fqdn }}
         StrictHostKeyChecking no
+        IdentityFile {{ borgbackup_ssh_key }}
         {% if item.port is defined %}
         Port {{ item.port }}
         {% endif %}
