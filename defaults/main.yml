@@ -37,3 +37,7 @@ borgbackup_appendonly: False
 borgbackup_management_station: ''
 borgbackup_management_user: ''
 borgbackup_management_ssh_pubkey: ''
+
+borgbackup_owner: root
+borgbackup_group: root
+borgbackup_shell: "/bin/bash"

@@ -96,8 +96,8 @@
   template:
     src: "borg-backup.sh.j2"
     dest: "/usr/local/bin/borg-backup"
-    owner: "root"
-    group: "root"
+    owner: "{{ borgbackup_owner }}"
+    group: "{{ borgbackup_group }}"
     mode: "0744"
 
 - name: client | create backup-directory on backup server
