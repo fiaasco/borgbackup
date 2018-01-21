@@ -46,7 +46,7 @@
   with_items: "{{ borgbackup_servers }}"
   changed_when: false
 
-- name: client | modify local rsync.net authorized_keys
+- name: client | modify local rsync.net/hetzner authorized_keys
   authorized_key:
     user: "{{ ansible_user_id }}"
     key: "{{ sshkey.stdout }}"
@@ -55,19 +55,7 @@
     manage_dir: no
   delegate_to: localhost
   become: no
-  when: item.type == 'rsync.net'
-  with_items: "{{ borgbackup_servers }}"
-  register: authkeys
-
-- name: client | modify local hetzner authorized_keys
-  authorized_key:
-    user: "{{ ansible_user_id }}"
-    key: "{{ sshkey.stdout }}"
-    path: "/tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys"
-    manage_dir: no
-  delegate_to: localhost
-  become: no
-  when: item.type == 'hetzner'
+  when: item.type in ['rsync.net','hetzner']
   with_items: "{{ borgbackup_servers }}"
   register: authkeys
 
