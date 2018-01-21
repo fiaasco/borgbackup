@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Luc Stroobant and Dieter Verhelst
-  description: Borg backup server and client role
+  description: Install Borg backup server and client (with rsync.net server support)
   license: MIT
   min_ansible_version: 1.9
   platforms:
