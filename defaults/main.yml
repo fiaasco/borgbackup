@@ -10,12 +10,16 @@ borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{
 borgbackup_pre_commands:
   - '[[ ! -f "/usr/sbin/automysqlbackup" ]] || /usr/sbin/automysqlbackup'
 
+borgbackup_post_commands: []
+
 borgbackup_include:
   - "/etc"
   - "/home"
   - "/root"
   - "/var/www"
   - "/var/log"
+
+borgbackup_exclude: []
 
 borgbackup_retention:
   hourly: 12
@@ -33,3 +37,7 @@ borgbackup_appendonly: False
 borgbackup_management_station: ''
 borgbackup_management_user: ''
 borgbackup_management_ssh_pubkey: ''
+
+borgbackup_owner: root
+borgbackup_group: root
+borgbackup_shell: "/bin/bash"
