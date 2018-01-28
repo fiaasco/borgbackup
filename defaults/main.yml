@@ -4,10 +4,11 @@ borgbackup_required: True
 borgbackup_client_user: root
 borgbackup_ssh_key: "~{{ borgbackup_client_user }}/.ssh/id_borg_rsa"
 
-borgbackup_version: "1.0.11"
-borgbackup_checksum: "sha256:fbdc0e0d6d05a0935551f2f408f370236a76b7a30d3bb90a31c3628fe3611359"
+borgbackup_version: "1.1.4"
+borgbackup_checksum: "sha256:4ecf507f21f0db7c437b2ef34566273d7ba5a7d05e921c6f0e3406c3f96933a7"
 borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"
 
+borgbackup_encryption_mode: keyfile
 borgbackup_pre_commands:
   - '[[ ! -f "/usr/sbin/automysqlbackup" ]] || /usr/sbin/automysqlbackup'
 
