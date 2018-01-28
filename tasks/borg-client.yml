@@ -95,6 +95,7 @@
 
 - name: client | create backup-directory on backup server
   shell: /usr/local/bin/borg-backup init
+  become_user: "{{ borgbackup_client_user }}"
   register: backup_init
   changed_when: "'Remember your passphrase' in backup_init.stderr"
 
