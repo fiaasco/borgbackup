@@ -1,6 +1,11 @@
 ---
 - name: client | generate ssh key for this machine
-  shell: if [ -f {{ borgbackup_ssh_key }} ]; then rm -f {{ borgbackup_ssh_key }}; fi && ssh-keygen -q -t rsa -b 4096 -f {{ borgbackup_ssh_key }} -N "" creates="{{ borgbackup_ssh_key }}.pub"
+  user:
+    name: "{{ borgbackup_client_user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: "{{ borgbackup_ssh_key }}"
+    ssh_key_type: rsa
 
 - name: client | fetch ssh-key
   shell: "cat {{ borgbackup_ssh_key }}.pub"
@@ -9,14 +14,14 @@
 
 - name: client | write passphrase
   lineinfile:
-    dest: "/root/.borg.passphrase"
+    dest: "~{{ borgbackup_client_user }}/.borg.passphrase"
     state: "present"
     line: 'export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"'
     create: "yes"
 
 - name: client | disable strict key checking for backup servers
   blockinfile:
-    dest: /root/.ssh/config
+    dest: "~{{ borgbackup_client_user }}/.ssh/config"
     create: yes
     marker: "### {mark} ANSIBLE MANAGED BLOCK {{ item.fqdn }} ###"
     content: |
@@ -96,7 +101,7 @@
 - name: client | create backup cronjob
   cron:
     cron_file: "borg-backup"
-    user: "{{ borgbackup_cron_user }}"
+    user: "{{ borgbackup_client_user }}"
     name: "borg-backup"
     minute: "{{ borgbackup_cron_minute }}"
     hour: "{{ borgbackup_cron_hour }}"
