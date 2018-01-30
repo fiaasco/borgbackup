@@ -7,7 +7,7 @@ fi
 
 # Sourcing the backup-passphrase
 
-. /root/.borg.passphrase
+. ~{{ borgbackup_client_user }}/.borg.passphrase
 
 # Small helper commands, like listing backups, will help us in the future :)
 
@@ -16,7 +16,7 @@ if [ "$1" = "info" ]
     if [ -z "$2" ]; then printf "run $0 with list and use the backup-tag to request information\n"; exit 1; fi
 {% for b in borgbackup_servers %}
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
-    /usr/local/bin/borg info $REPOSITORY::$2 {{ b.options }}
+    /usr/local/bin/borg info {{ b.options }} $REPOSITORY::$2
 {% endfor %}
     exit 0
 fi
@@ -28,7 +28,7 @@ if [ "$1" = "mount" ]
     if [ -z "$4" ]; then printf "Select the path to mount the backup on\n"; exit 1; fi
 {% for b in borgbackup_servers %}
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
-    /usr/local/bin/borg mount $REPOSITORY::$3 $4 {{ b.options }}
+    /usr/local/bin/borg mount {{ b.options }} $REPOSITORY::$3 $4
     if [ "$?" = "0" ]; then printf "Backup mounted on $4, do not forget to unmount!\n"; fi
     exit 0
 {% endfor %}
@@ -39,7 +39,7 @@ if [ "$1" = "list" ]
 {% for b in borgbackup_servers %}
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
     printf "Archives on {{ b.fqdn }} :\n"
-    /usr/local/bin/borg list -v $REPOSITORY {{ b.options }}
+    /usr/local/bin/borg list {{ b.options }} -v $REPOSITORY
 {% endfor %}
     exit 0
 fi
@@ -48,7 +48,7 @@ if [ "$1" = "init" ]
   then
 {% for b in borgbackup_servers %}
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
-    /usr/local/bin/borg init $REPOSITORY {{ b.options }}
+    /usr/local/bin/borg init --encryption={{ borgbackup_encryption_mode }} {{ b.options }} $REPOSITORY
 {% endfor %}
     exit 0
 fi
@@ -66,13 +66,13 @@ if [ "$1" = "backup" ]
     printf "Backing up to {{ b.fqdn }} :\n"
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
     
-    /usr/local/bin/borg create -p --compression zlib,6 --stats $REPOSITORY::$date {{ b.options }} {% for dir in borgbackup_include %}{{ dir }} {% endfor %}{% if automysql.stat.isdir is defined and automysql.stat.isdir == True %}/var/lib/automysqlbackup{% endif %} {% for dir in borgbackup_exclude %} --exclude '{{ dir }}'{% endfor %}
+    /usr/local/bin/borg create --progress --compression {{ borgbackup_compression }} --stats {{ b.options }} $REPOSITORY::$date {% for dir in borgbackup_include %}{{ dir }} {% endfor %}{% if automysql.stat.isdir is defined and automysql.stat.isdir == True %}/var/lib/automysqlbackup{% endif %} {% for dir in borgbackup_exclude %} --exclude '{{ dir }}'{% endfor %}
 
     if [ "$?" -eq "0" ]; then printf "Backup succeeded on $date to {{ b.fqdn }}\n" >> /var/log/borg-backup.log; fi
 
   {% if not borgbackup_appendonly %}
     # prune old backups
-    /usr/local/bin/borg prune -v $REPOSITORY {{ b.options }} -H {{ borgbackup_retention.hourly }} -d {{ borgbackup_retention.daily }} -w {{ borgbackup_retention.weekly }} -m {{ borgbackup_retention.monthly }} -y {{ borgbackup_retention.yearly }}
+    /usr/local/bin/borg prune {{ b.options }} -v $REPOSITORY -H {{ borgbackup_retention.hourly }} -d {{ borgbackup_retention.daily }} -w {{ borgbackup_retention.weekly }} -m {{ borgbackup_retention.monthly }} -y {{ borgbackup_retention.yearly }}
   {% endif %}
 {% endfor %}
 
