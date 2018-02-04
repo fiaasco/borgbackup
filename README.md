@@ -4,6 +4,8 @@ The role supports both self hosted and offsite backup-storage such as rsync.net 
 
 It's possible to configure append-only repositories to secure the backups against deletion from the client.
 
+Ansible 2.4 is required to run this role.
+
 ## Required variables
 Define a group borgbackup\_servers in your inventory with one or multiple hosts. The group borgbackup\_management is only necessary if you want to enable append-only mode and prune the backups from a secured hosts.
 ```
@@ -74,4 +76,4 @@ ansible-playbook -i inventory/test backup.yml -l client1.fiaas.co
 ```
 
 ## Further reading
-https://borgbackup.readthedocs.io/en/stable/
+* https://borgbackup.readthedocs.io/en/stable/
