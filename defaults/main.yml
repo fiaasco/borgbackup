@@ -37,6 +37,7 @@ borgbackup_cron_hour: "{{ 5|random }}"
 borgbackup_cron_minute: "{{ 59|random }}"
 
 borgbackup_appendonly: False
+borgbackup_appendonly_repoconfig: False
 borgbackup_management_station: ''
 borgbackup_management_user: ''
 borgbackup_management_ssh_pubkey: ''

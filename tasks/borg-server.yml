@@ -18,3 +18,4 @@
     mode: "0770"
   delegate_to: "{{ item.fqdn }}"
   with_items: "{{ borgbackup_servers }}"
+  when: item.type == 'normal'

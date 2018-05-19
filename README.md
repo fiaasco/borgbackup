@@ -4,7 +4,7 @@ The role supports both self hosted and offsite backup-storage such as rsync.net 
 
 It's possible to configure append-only repositories to secure the backups against deletion from the client.
 
-Ansible 2.4 is required to run this role.
+Ansible 2.4 or higher is required to run this role.
 
 ## Required variables
 Define a group borgbackup\_servers in your inventory with one or multiple hosts. The group borgbackup\_management is only necessary if you want to enable append-only mode and prune the backups from a secured hosts.
@@ -63,9 +63,11 @@ borgbackup_cron_hour: "{{ 5|random }}"
 ```
 Override borgbackup\_client\_user where required, for example if you have a laptop with an encrypted homedir you'll have to run the backup as the user of that homedir.
 
-Set borgbackup\_appendonly: True in host or group vars if you want append-only repositories. In that case it's possible to define a hostname in borgbackup\_management\_station where a borg prune script will be configured. Only the management station will have permission to prune old backups for (all) clients.
+Set borgbackup\_appendonly: True in host or group vars if you want append-only repositories. In that case it's possible to define a hostname in borgbackup\_management\_station where a borg prune script will be configured. Only the management station will have permission to prune old backups for (all) clients. This will generate serve with --append-only ssh key options.
+If you set borgbackup\_appendonly\_repoconfig to True, this will also disable the possibility to remove backups from the management station. (Or at least: it's not possible to remove them till you reconfigure the repository and this is currently not supported in the prune script)
+Be aware of the limitations of append-only mode: [pruned backups appear to be removed, but are only removed in the transaction log till something writes in normal mode to the repository](https://github.com/borgbackup/borg/issues/3504))
 
-*Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup_include.* Override this in your inventory where required.
+*Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup\_include.* Override this in your inventory where required.
 
 ## Usage
 
@@ -76,4 +78,5 @@ ansible-playbook -i inventory/test backup.yml -l client1.fiaas.co
 ```
 
 ## Further reading
-* https://borgbackup.readthedocs.io/en/stable/
+* [Borg documentation](https://borgbackup.readthedocs.io/en/stable/)
+* [Append only mode information](http://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode)
