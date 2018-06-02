@@ -48,7 +48,7 @@ if [ "$1" = "init" ]
   then
 {% for b in borgbackup_servers %}
     REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
-    /usr/local/bin/borg init --encryption={{ borgbackup_encryption_mode }} {{ b.options }} $REPOSITORY
+    /usr/local/bin/borg init --encryption={{ borgbackup_encryption_mode }}{% if borgbackup_appendonly_repoconfig %} --append-only{% endif %} {{ b.options }} $REPOSITORY
 {% endfor %}
     exit 0
 fi
