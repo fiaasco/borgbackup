@@ -3,8 +3,8 @@
   get_url:
     dest: "/usr/local/bin/borg"
     checksum: "{{ borgbackup_checksum }}"
-    owner: "root"
-    group: "root"
+    owner: "{{ borgbackup_owner }}"
+    group: "{{ borgbackup_group }}"
     mode: "0755"
     url: "{{ borgbackup_download_url }}"
   tags: borginstall
