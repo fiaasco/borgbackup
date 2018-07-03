@@ -10,7 +10,7 @@
     {% for b in hostvars[h].borgbackup_servers %}
       {% if hostvars[h].borgbackup_management_station is defined and inventory_hostname == hostvars[h].borgbackup_management_station %}
       export BORG_PASSPHRASE={{ hostvars[h].borgbackup_passphrase }}
-      REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ h }}
+      REPOSITORY={% if b.type == 'hetzner' %}ssh://{% endif %}{{ b.user }}@{{ b.fqdn }}:{% if b.type == 'hetzner' %}23/./{% endif %}{{ b.home }}{{ b.pool }}/{{ h }}
       /usr/local/bin/borg prune -v $REPOSITORY {{ b.options }} -H {{ hostvars[h].borgbackup_retention.hourly }} -d {{ hostvars[h].borgbackup_retention.daily }} -w {{ hostvars[h].borgbackup_retention.weekly }} -m {{ hostvars[h].borgbackup_retention.monthly }} -y {{ hostvars[h].borgbackup_retention.yearly }}
 
       {% endif %}
