@@ -33,8 +33,8 @@ borgbackup_retention:
   yearly: 1
 
 borgbackup_cron_day: "*"
-borgbackup_cron_hour: "{{ 5|random }}"
-borgbackup_cron_minute: "{{ 59|random }}"
+borgbackup_cron_hour: "{{ 5|random(seed=inventory_hostname) }}"
+borgbackup_cron_minute: "{{ 59|random(seed=inventory_hostname) }}"
 
 borgbackup_appendonly: False
 borgbackup_appendonly_repoconfig: False
