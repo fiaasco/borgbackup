@@ -1,0 +1,23 @@
+---
+- name: prepare servers - Debian only
+  hosts: borgbackup_servers
+  gather_facts: true
+  tasks:
+    - name: start ssh - Debian Server
+      command: service ssh start
+# note: https://forums.docker.com/t/any-simple-and-safe-way-to-start-services-on-centos7-systemd/5695/8
+# needs to be implemented
+#   - name: start sshd
+#     command: service sshd start
+
+- name: prepare lamp
+  hosts: lamp
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - apache2
+        - mysql-server
+        - automysqlbackup

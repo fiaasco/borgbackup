@@ -1,0 +1,28 @@
+# Molecule managed
+
+---
+file:
+{% for item in borgbackup_servers %}
+{% if item.fqdn == inventory_hostname %}
+  {{ item.home }}:
+    exists: true
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+{% for host in groups.all|difference(groups.borgbackup_servers) %}
+  {{ item.home }}/repos/{{ host }}:
+    exists: true
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% for item in borgbackup_servers %}
+{% if item.fqdn == inventory_hostname %}
+  {{ item.home }}/.ssh/authorized_keys:
+    exists: true
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    contains:
+{% for host in groups.all|difference(groups.borgbackup_servers) %}
+      - "{{ host }};borg serve"
+{% endfor %}
+{% endif %}
+{% endfor %}

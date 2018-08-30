@@ -1,0 +1,44 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: ${MOLECULE_SCENARIO_NAME}-cds
+    hostname: ${MOLECULE_SCENARIO_NAME}-cds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - lamp
+  - name: ${MOLECULE_SCENARIO_NAME}-sds
+    hostname: ${MOLECULE_SCENARIO_NAME}-sds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - borgbackup_servers
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        borgbackup_appendonly: true
+        borgbackup_servers:
+          - fqdn: ${MOLECULE_SCENARIO_NAME}-sds
+            user: borgds
+            type: normal
+            home: /var/backup/
+            pool: repos
+            options: ""
+    host_vars:
+      ${MOLECULE_SCENARIO_NAME}-cds:
+        borgbackup_passphrase: soo6Uabiex
+  lint:
+    name: ansible-lint
+scenario:
+  name: lamp
+verifier:
+  name: goss
+  lint:
+    name: yamllint

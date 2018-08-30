@@ -1,0 +1,76 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: ${MOLECULE_SCENARIO_NAME}-cds
+    hostname: ${MOLECULE_SCENARIO_NAME}-cds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cub
+    hostname: ${MOLECULE_SCENARIO_NAME}-cub
+    image: ubuntu:bionic
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-sds
+    hostname: ${MOLECULE_SCENARIO_NAME}-sds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - borgbackup_servers
+  - name: ${MOLECULE_SCENARIO_NAME}-mds
+    hostname: ${MOLECULE_SCENARIO_NAME}-mds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - borgbackup_management
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        borgbackup_appendonly: true
+        borgbackup_servers:
+          - fqdn: ${MOLECULE_SCENARIO_NAME}-sds
+            user: borgds
+            type: normal
+            home: /var/backup/
+            pool: repos
+            options: ""
+        borgbackup_retention:
+          hourly: 12
+          daily: 7
+          weekly: 4
+          monthly: 6
+          yearly: 1
+        borgbackup_include:
+          - "/etc"
+          - "/root"
+          - "/var/log"
+          - "/home"
+        borgbackup_management_station: ${MOLECULE_SCENARIO_NAME}-mds
+      borgbackup_servers:
+        borgbackup_required: false
+      borgbackup_management:
+        borgbackup_management_user: root
+        borgbackup_management_sshkey: |
+          ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
+    host_vars:
+      ${MOLECULE_SCENARIO_NAME}-cds:
+        borgbackup_passphrase: soo6Uabiex
+      ${MOLECULE_SCENARIO_NAME}-cub:
+        borgbackup_passphrase: iousheafqj
+      ${MOLECULE_SCENARIO_NAME}-mds:
+        borgbackup_passphrase: Zuequei1ro
+  lint:
+    name: ansible-lint
+scenario:
+  name: mgt
+verifier:
+  name: goss
+  lint:
+    name: yamllint

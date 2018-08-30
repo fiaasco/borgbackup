@@ -1,0 +1,17 @@
+# Molecule managed
+
+---
+file:
+  /etc/hosts:
+    exists: true
+    owner: root
+    group: root
+  /usr/local/bin/borg-backup:
+    exists: true
+    owner: root
+    group: root
+    contains:
+      - "automysqlbackup"
+      - "/var/www"
+  /var/lib/automysqlbackup/daily:
+    exists: true

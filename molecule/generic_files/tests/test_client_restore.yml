@@ -1,0 +1,18 @@
+---
+file:
+  /root/sample.txt:
+    exists: true
+
+command:
+{% for item in borgbackup_servers %}
+  diff -s /root/sample.txt /root/restore/{{ item.fqdn }}/root/sample.txt:
+    exit-status: 0
+    stdout:
+      - "Files /root/sample.txt and /root/restore/{{ item.fqdn }}/root/sample.txt are identical"
+{% endfor %}
+  /root/restore.sh verify:
+    exit-status: 0
+    stdout:
+{% for item in borgbackup_servers %}
+      - "verifying on {{ item.fqdn }}"
+{% endfor %}

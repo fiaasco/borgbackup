@@ -1,0 +1,96 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: ${MOLECULE_SCENARIO_NAME}-cub
+    hostname: ${MOLECULE_SCENARIO_NAME}-cub
+    image: ubuntu:bionic
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cux
+    hostname: ${MOLECULE_SCENARIO_NAME}-cux
+    image: ubuntu:xenial
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cut
+    hostname: ${MOLECULE_SCENARIO_NAME}-cut
+    image: ubuntu:trusty
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cds
+    hostname: ${MOLECULE_SCENARIO_NAME}-cds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cdj
+    hostname: ${MOLECULE_SCENARIO_NAME}-cdj
+    image: debian:jessie
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cdw
+    hostname: ${MOLECULE_SCENARIO_NAME}-cdw
+    image: debian:wheezy
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cc7
+    hostname: ${MOLECULE_SCENARIO_NAME}-cc7
+    image: centos:7
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-cc6
+    hostname: ${MOLECULE_SCENARIO_NAME}-cc6
+    image: centos:6
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+  - name: ${MOLECULE_SCENARIO_NAME}-sds
+    hostname: ${MOLECULE_SCENARIO_NAME}-sds
+    image: debian:stretch
+    networks:
+      - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - borgbackup_servers
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        borgbackup_appendonly: true
+        borgbackup_servers:
+          - fqdn: ${MOLECULE_SCENARIO_NAME}-sds
+            user: borgds
+            type: normal
+            home: /var/backup/
+            pool: repos
+            options: ""
+        borgbackup_include:
+          - "/etc"
+          - "/root"
+          - "/var/log"
+          - "/home"
+    host_vars:
+      ${MOLECULE_SCENARIO_NAME}-cub:
+        borgbackup_passphrase: soo6Uabiex
+      ${MOLECULE_SCENARIO_NAME}-cux:
+        borgbackup_passphrase: ooFeila1ie
+      ${MOLECULE_SCENARIO_NAME}-cut:
+        borgbackup_passphrase: oisjflqohu
+      ${MOLECULE_SCENARIO_NAME}-cds:
+        borgbackup_passphrase: eewoo7paf6J
+      ${MOLECULE_SCENARIO_NAME}-cdj:
+        borgbackup_passphrase: aef1Iekahpi
+      ${MOLECULE_SCENARIO_NAME}-cdw:
+        borgbackup_passphrase: ReiTul4asei
+      ${MOLECULE_SCENARIO_NAME}-cc7:
+        borgbackup_passphrase: ASFQiejwasd
+      ${MOLECULE_SCENARIO_NAME}-cc6:
+        borgbackup_passphrase: Ansdkfqooia
+  lint:
+    name: ansible-lint
+scenario:
+  name: clients
+verifier:
+  name: goss
+  lint:
+    name: yamllint
