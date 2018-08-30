@@ -2,7 +2,7 @@
 - name: client | generate ssh key for this machine
   user:
     name: "{{ borgbackup_client_user }}"
-    generate_ssh_key: yes
+    generate_ssh_key: true
     ssh_key_bits: 2048
     ssh_key_file: "{{ borgbackup_ssh_key }}"
     ssh_key_type: rsa
@@ -10,19 +10,19 @@
 - name: client | fetch ssh-key
   shell: "cat {{ borgbackup_ssh_key }}.pub"
   register: sshkey
-  changed_when: False
+  changed_when: false
 
 - name: client | write passphrase
   lineinfile:
     dest: "~{{ borgbackup_client_user }}/.borg.passphrase"
     state: "present"
     line: 'export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"'
-    create: "yes"
+    create: true
 
 - name: client | disable strict key checking for backup servers
   blockinfile:
     dest: "~{{ borgbackup_client_user }}/.ssh/config"
-    create: yes
+    create: true
     marker: "### {mark} ANSIBLE MANAGED BLOCK {{ item.fqdn }} ###"
     content: |
       Host {{ item.fqdn }}
@@ -46,7 +46,7 @@
 - name: client | get authorized_keys file
   raw: scp {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type in ['rsync.net','hetzner']
   with_items: "{{ borgbackup_servers }}"
   changed_when: false
@@ -57,9 +57,9 @@
     key: "{{ sshkey.stdout }}"
     key_options: 'command="cd {{ item.pool }}/{{ inventory_hostname }};/usr/local/bin/borg1 serve {% if borgbackup_appendonly %}--append-only {% endif %} --restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'
     path: "/tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys"
-    manage_dir: no
+    manage_dir: false
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type in ['rsync.net','hetzner']
   with_items: "{{ borgbackup_servers }}"
   register: authkeys
@@ -67,7 +67,7 @@
 - name: client | upload local authorized_keys to rsync.net / hetzner
   raw: scp /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type in ['rsync.net','hetzner'] and authkeys.changed
   with_items: "{{ borgbackup_servers }}"
 
@@ -76,7 +76,7 @@
     path: /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys
     state: absent
   delegate_to: localhost
-  become: no
+  become: false
   with_items: "{{ borgbackup_servers }}"
   when: authkeys.changed
   changed_when: false
@@ -109,12 +109,12 @@
     day: "{{ borgbackup_cron_day }}"
     job: "/usr/local/bin/borg-backup backup"
 
-- name: client | disable automysqlbackup cronjob, it's in our pre-backup-tasks 
+- name: client | disable automysqlbackup cronjob, it's in our pre-backup-tasks
   lineinfile:
     dest: "/etc/cron.daily/automysqlbackup"
     regexp: "^/usr/sbin/automysqlbackup$"
     line: "#/usr/sbin/automysqlbackup"
     state: "present"
-    backrefs: "yes"
-    create: "no"
+    backrefs: true
+    create: false
   when: automysql.stat.isdir is defined and automysql.stat.isdir == True

@@ -2,7 +2,7 @@
 
 - name: Configure Borg backup
   hosts: all
-  become: True
+  become: true
 
   roles:
     - role: borgbackup
