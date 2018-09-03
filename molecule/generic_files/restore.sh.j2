@@ -1,1 +1,36 @@
-../restore/restore.sh.j2
+#!/bin/sh
+
+export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"
+
+last_backup=`/usr/local/bin/borg-backup list | grep '^[0-9]' | awk ' { print $1 } ' | tail -1`
+
+if [ "$1" = "verify" ]
+  then
+{% for b in borgbackup_servers %}
+{% if b.type == 'hetzner' %}
+    REPOSITORY=ssh://{{ b.user }}@{{ b.fqdn }}:23/./{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% else %}
+    REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% endif %}
+    printf "verifying on {{ b.fqdn }} :\n"
+    /usr/local/bin/borg extract --list --dry-run $REPOSITORY::$last_backup root/sample.txt
+{% endfor %}
+    exit 0
+fi
+
+if [ "$1" = "restore" ]
+  then
+    file="$2"
+{% for b in borgbackup_servers %}
+{% if b.type == 'hetzner' %}
+    REPOSITORY=ssh://{{ b.user }}@{{ b.fqdn }}:23/./{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% else %}
+    REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% endif %}
+    rm -rf /root/restore/{{ b.fqdn }}
+    mkdir -p /root/restore/{{ b.fqdn }}
+    cd /root/restore/{{ b.fqdn }}
+    /usr/local/bin/borg extract $REPOSITORY::$last_backup root/sample.txt
+{% endfor %}
+    exit 0
+fi
