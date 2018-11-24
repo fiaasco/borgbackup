@@ -25,6 +25,7 @@ borgbackup_servers:
     home: /backup/
     pool: repos
     options: ""
+    alias: fiaasco
   - fqdn: yourhost.rsync.net
     user: userid
     type: rsync.net
@@ -37,6 +38,7 @@ borgbackup_servers:
     home: ""
     pool: repos
     options: ""
+    alias: hetznerde
 
 
 borgbackup_retention:
