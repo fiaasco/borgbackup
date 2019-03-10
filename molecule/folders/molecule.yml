@@ -9,8 +9,6 @@ platforms:
     image: debian:stretch
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
-    groups:
-      - lamp
   - name: ${MOLECULE_SCENARIO_NAME}-sds
     hostname: ${MOLECULE_SCENARIO_NAME}-sds
     image: debian:stretch

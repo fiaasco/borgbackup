@@ -10,8 +10,8 @@
 #   - name: start sshd
 #     command: service sshd start
 
-- name: prepare lamp
-  hosts: lamp
+- name: prepare all
+  hosts: all:!borgbackup_servers:!centos
   tasks:
     - name: Install required packages
       apt:
