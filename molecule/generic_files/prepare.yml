@@ -15,9 +15,15 @@
   tasks:
     - name: Install required packages
       apt:
-        name: "{{ item }}"
-        state: installed
-      with_items:
-        - apache2
-        - mysql-server
-        - automysqlbackup
+        name:
+          - apache2
+          - mysql-server
+          - automysqlbackup
+        state: present
+      notify: start mysql
+  handlers:
+    - name: start mysql
+      service:
+        name: mysql
+        state: started
+        enabled: yes
