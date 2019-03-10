@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/dverhelst/borgbackup.svg?branch=feature/molecule)](https://travis-ci.com/dverhelst/borgbackup)
+
 # Borg backup role
 This role installs Borg backup on borgbackup\_servers and clients. The role contains a wrapper-script 'borg-backup' to ease the usage on the client. Supported options include borg-backup info | init | list | backup | mount. Automysqlbackup will run as pre-backup command if it's installed.
 The role supports both self hosted and offsite backup-storage such as rsync.net and hetzner storage box as Borg server.
