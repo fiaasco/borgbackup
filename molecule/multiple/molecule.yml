@@ -18,7 +18,7 @@ platforms:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
   - name: ${MOLECULE_SCENARIO_NAME}-sds
     hostname: ${MOLECULE_SCENARIO_NAME}-sds
-    image: debian:stretch
+    image: ubuntu:xenial
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
     groups:
@@ -59,6 +59,8 @@ provisioner:
         borgbackup_passphrase: soo6Uabiex
       ${MOLECULE_SCENARIO_NAME}-cub:
         borgbackup_passphrase: lidafruhkj
+      ${MOLECULE_SCENARIO_NAME}-sub:
+        borgbackup_passphrase: oiasdfoain
   lint:
     name: ansible-lint
 scenario:
