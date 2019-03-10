@@ -10,4 +10,9 @@ install:
   - pip install ansible==2.7
   - pip install docker
 script:
-  - molecule test --all
+  - molecule test --scenario-name commands
+  - molecule test --scenario-name folders
+  - molecule test --scenario-name lamp
+  - molecule test --scenario-name mgt
+  - molecule test --scenario-name multiple
+  - molecule test --scenario-name clients
