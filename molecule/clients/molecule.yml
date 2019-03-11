@@ -14,11 +14,6 @@ platforms:
     image: ubuntu:xenial
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cut
-    hostname: ${MOLECULE_SCENARIO_NAME}-cut
-    image: ubuntu:trusty
-    networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
   - name: ${MOLECULE_SCENARIO_NAME}-cds
     hostname: ${MOLECULE_SCENARIO_NAME}-cds
     image: debian:stretch
@@ -27,11 +22,6 @@ platforms:
   - name: ${MOLECULE_SCENARIO_NAME}-cdj
     hostname: ${MOLECULE_SCENARIO_NAME}-cdj
     image: debian:jessie
-    networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cdw
-    hostname: ${MOLECULE_SCENARIO_NAME}-cdw
-    image: debian:wheezy
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
   - name: ${MOLECULE_SCENARIO_NAME}-cc7
@@ -78,14 +68,10 @@ provisioner:
         borgbackup_passphrase: soo6Uabiex
       ${MOLECULE_SCENARIO_NAME}-cux:
         borgbackup_passphrase: ooFeila1ie
-      ${MOLECULE_SCENARIO_NAME}-cut:
-        borgbackup_passphrase: oisjflqohu
       ${MOLECULE_SCENARIO_NAME}-cds:
         borgbackup_passphrase: eewoo7paf6J
       ${MOLECULE_SCENARIO_NAME}-cdj:
         borgbackup_passphrase: aef1Iekahpi
-      ${MOLECULE_SCENARIO_NAME}-cdw:
-        borgbackup_passphrase: ReiTul4asei
       ${MOLECULE_SCENARIO_NAME}-cc7:
         borgbackup_passphrase: ASFQiejwasd
       ${MOLECULE_SCENARIO_NAME}-cc6:
