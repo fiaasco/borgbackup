@@ -14,20 +14,11 @@ install:
   - pip install ansible
   - pip install docker
 
-jobs:
-  include:
-    - stage: "Exclude / Include paths"
-      name: "Exclude / Include paths"
-      script: molecule test --scenario-name folders
-    - stage: "Test default LAMP"
-      name: "Test default LAMP"
-      script: molecule test --scenario-name lamp
-    - stage: "Test Management Station"
-      name: "Test Management Station"
-      script: molecule test --scenario-name mgt
-    - stage: "Test Multiple Backup Targets"
-      name: "Test Multiple Backup Targets"
-      script: molecule test --scenario-name multiple
-    - stage: "Testing a variety of different platforms"
-      name: "Testing a variety of different platforms"
-      script: molecule test --scenario-name clients
+env:
+  - SCENARIO=folders
+  - SCENARIO=lamp
+  - SCENARIO=mgt
+  - SCENARIO=multiple
+  - SCENARIO=clients
+
+script: "molecule test --scenario-name $SCENARIO"
