@@ -42,4 +42,4 @@ def test_list_backups(host, server):
     command = host.run("bash /usr/local/bin/borg-backup list")
     assert command.rc == 0
     assert command.stderr == ''
-    assert re.match("Archives on %s :\n[0-9]{8}-[0-9]{4}.*" % server, command.stdout) is not None
+    assert "Archives on %s :\n2" % server in command.stdout
