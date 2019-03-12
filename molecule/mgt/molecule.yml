@@ -71,6 +71,6 @@ provisioner:
 scenario:
   name: mgt
 verifier:
-  name: goss
+  name: testinfra
   lint:
-    name: yamllint
+    name: flake8

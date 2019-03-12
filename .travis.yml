@@ -15,4 +15,4 @@ script:
   - molecule test --scenario-name lamp
   - molecule test --scenario-name mgt
   - molecule test --scenario-name multiple
-  - molecule test --scenario-name clients
+#  - molecule test --scenario-name clients

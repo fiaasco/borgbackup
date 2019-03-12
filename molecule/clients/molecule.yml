@@ -81,6 +81,4 @@ provisioner:
 scenario:
   name: clients
 verifier:
-  name: goss
-  lint:
-    name: yamllint
+  name: testinfra

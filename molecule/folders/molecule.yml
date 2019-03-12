@@ -9,6 +9,8 @@ platforms:
     image: debian:stretch
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
+    groups:
+      - folders
   - name: ${MOLECULE_SCENARIO_NAME}-sds
     hostname: ${MOLECULE_SCENARIO_NAME}-sds
     image: debian:stretch
@@ -45,6 +47,6 @@ provisioner:
 scenario:
   name: folders
 verifier:
-  name: goss
+  name: testinfra
   lint:
-    name: yamllint
+    name: flake8

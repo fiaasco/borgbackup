@@ -66,6 +66,6 @@ provisioner:
 scenario:
   name: multiple
 verifier:
-  name: goss
+  name: testinfra
   lint:
-    name: yamllint
+    name: flake8

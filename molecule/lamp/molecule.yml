@@ -39,6 +39,6 @@ provisioner:
 scenario:
   name: lamp
 verifier:
-  name: goss
+  name: testinfra
   lint:
-    name: yamllint
+    name: flake8

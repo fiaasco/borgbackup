@@ -1,9 +1,0 @@
-# Molecule managed
-
----
-file:
-  /usr/local/bin/borg:
-    exists: true
-    owner: root
-    group: root
-    mode: "0755"
