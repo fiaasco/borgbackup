@@ -1,6 +1,5 @@
 import os
 import pytest
-import re
 from testinfra.utils.ansible_runner import AnsibleRunner
 
 testinfra_hosts = ["ansible://all:!borgbackup_servers"]
