@@ -36,6 +36,7 @@
 
 - name: prepare lamp
   hosts: lamp
+  gather_facts: false
   tasks:
     - name: Install required packages
       apt:
