@@ -7,6 +7,7 @@
     createhome: "yes"
   delegate_to: "{{ item.fqdn }}"
   with_items: "{{ borgbackup_servers }}"
+  run_once: true
   when: item.type == 'normal'
 
 - name: server | create directories
