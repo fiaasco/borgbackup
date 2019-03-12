@@ -1,17 +1,41 @@
 ---
-- name: prepare servers - Debian only
-  hosts: borgbackup_servers
-  gather_facts: true
+- name: prepare debian-based systems
+  hosts: all:!centos
+  gather_facts: false
   tasks:
+    - name: install required packages
+      apt:
+        name:
+          - bash
+          - ca-certificates
+          - cron
+          - iputils-ping
+          - openssh-client
+
+- name: prepare centos-based systems
+  hosts: centos
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      yum:
+        name:
+          - anacron
+          - iputils
+          - openssh-clients
+
+- name: prepare debian-based backupservers
+  hosts: borgbackup_servers
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      apt:
+        name:
+          - openssh-server
     - name: start ssh - Debian Server
       command: service ssh start
-# note: https://forums.docker.com/t/any-simple-and-safe-way-to-start-services-on-centos7-systemd/5695/8
-# needs to be implemented
-#   - name: start sshd
-#     command: service sshd start
 
-- name: prepare all
-  hosts: all:!borgbackup_servers:!centos
+- name: prepare lamp
+  hosts: lamp
   tasks:
     - name: Install required packages
       apt:
