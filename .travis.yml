@@ -15,8 +15,8 @@ install:
   - pip install docker
 
 env:
-  - SCENARIO=folders
   - SCENARIO=lamp
+  - SCENARIO=extra_opts
   - SCENARIO=mgt
   - SCENARIO=multiple
   - SCENARIO=clients

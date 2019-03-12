@@ -10,7 +10,7 @@ platforms:
     networks:
       - name: ${MOLECULE_SCENARIO_NAME}-borg
     groups:
-      - folders
+      - extra_opts
   - name: ${MOLECULE_SCENARIO_NAME}-sds
     hostname: ${MOLECULE_SCENARIO_NAME}-sds
     image: debian:stretch
@@ -42,10 +42,14 @@ provisioner:
           - "/var/cache"
         borgbackup_exclude:
           - "/var/cache/apt"
+        borgbackup_pre_commands:
+          - "dpkg --get-selections"
+        borgbackup_post_commands:
+          - "apt list"
   lint:
     name: ansible-lint
 scenario:
-  name: folders
+  name: extra_opts
 verifier:
   name: testinfra
   options:
