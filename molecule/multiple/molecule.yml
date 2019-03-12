@@ -46,7 +46,7 @@ provisioner:
           - fqdn: ${MOLECULE_SCENARIO_NAME}-sub
             user: borgux
             type: normal
-            home: /var/backup-jail/
+            home: /var/backup/
             pool: repos
             options: ""
         borgbackup_include:
@@ -67,5 +67,7 @@ scenario:
   name: multiple
 verifier:
   name: testinfra
+  options:
+    verbose: true
   lint:
     name: flake8

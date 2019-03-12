@@ -72,5 +72,7 @@ scenario:
   name: mgt
 verifier:
   name: testinfra
+  options:
+    verbose: true
   lint:
     name: flake8

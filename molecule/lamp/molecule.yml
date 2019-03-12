@@ -40,5 +40,7 @@ scenario:
   name: lamp
 verifier:
   name: testinfra
+  options:
+    verbose: true
   lint:
     name: flake8
