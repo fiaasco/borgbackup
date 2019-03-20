@@ -20,7 +20,7 @@
 - name: management | get rsync.net authorized_keys file
   raw: scp {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys /tmp/rsync.net-{{ item.fqdn }}-authkeys
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type == 'rsync.net'
   with_items: "{{ borgbackup_servers }}"
   changed_when: false
@@ -30,9 +30,9 @@
     user: "{{ ansible_user_id }}"
     key: "{{ borgbackup_management_ssh_pubkey }}"
     path: "/tmp/rsync.net-{{ item.fqdn }}-authkeys"
-    manage_dir: no
+    manage_dir: false
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type == 'rsync.net'
   with_items: "{{ borgbackup_servers }}"
   register: authkeys
@@ -40,7 +40,7 @@
 - name: management | upload local authorized_keys to rsync.net
   raw: scp /tmp/rsync.net-{{ item.fqdn }}-authkeys {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys
   delegate_to: localhost
-  become: no
+  become: false
   when: item.type == 'rsync.net' and authkeys.changed
   with_items: "{{ borgbackup_servers }}"
 
@@ -49,7 +49,7 @@
     path: /tmp/rsync.net-{{ item.fqdn }}-authkeys
     state: absent
   delegate_to: localhost
-  become: no
+  become: false
   with_items: "{{ borgbackup_servers }}"
   when: authkeys.changed
   changed_when: false

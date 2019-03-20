@@ -1,0 +1,24 @@
+---
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get -qq update
+
+install:
+  - pip install molecule
+  - pip install ansible
+  - pip install docker
+
+env:
+  - SCENARIO=lamp
+  - SCENARIO=extra_opts
+  - SCENARIO=mgt
+  - SCENARIO=multiple
+  - SCENARIO=clients
+
+script: "molecule test --scenario-name $SCENARIO"

@@ -1,6 +1,7 @@
 ---
 # Due to inverse logic behaviour when searching for an item in an undefined list.
-- set_fact:
+- name: setting facts
+  set_fact:
     borgbackup_servers_group: "{{ groups.borgbackup_servers | default([]) }} "
     borgbackup_management_group: "{{ groups.borgbackup_management | default([]) }}"
 

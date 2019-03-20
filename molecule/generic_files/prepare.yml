@@ -1,0 +1,54 @@
+---
+- name: prepare debian-based systems
+  hosts: all:!centos
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      apt:
+        name:
+          - bash
+          - ca-certificates
+          - cron
+          - iputils-ping
+          - openssh-client
+
+- name: prepare centos-based systems
+  hosts: centos
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      yum:
+        name:
+          - anacron
+          - iputils
+          - openssh-clients
+
+- name: prepare debian-based backupservers
+  hosts: borgbackup_servers
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      apt:
+        name:
+          - openssh-server
+    - name: start ssh - Debian Server
+      command: service ssh start
+
+- name: prepare lamp
+  hosts: lamp
+  gather_facts: false
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - apache2
+          - mysql-server
+          - automysqlbackup
+        state: present
+      notify: start mysql
+  handlers:
+    - name: start mysql
+      service:
+        name: mysql
+        state: started
+        enabled: true
