@@ -1,0 +1,4 @@
+---
+- name: install borg backup
+  apt: name=borgbackup state=present
+  tags: borginstall
