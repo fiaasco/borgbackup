@@ -4,6 +4,10 @@ borgbackup_required: true
 borgbackup_client_user: root
 borgbackup_ssh_key: "~{{ borgbackup_client_user }}/.ssh/id_borg_rsa"
 
+borgbackup_binary: borg
+borgbackup_install_from_pkg: false
+borgbackup_package: borgbackup
+
 borgbackup_version: "1.1.4"
 borgbackup_checksum: "sha256:4ecf507f21f0db7c437b2ef34566273d7ba5a7d05e921c6f0e3406c3f96933a7"
 borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"

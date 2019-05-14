@@ -1,5 +1,12 @@
 ---
-- name: install borg backup
+# Use full path when using borg binary downloaded from web
+- name: install | set borg binary path
+  set_fact:
+    borgbackup_binary: "/usr/local/bin/borg"
+  tags: borginstall
+  when: not borgbackup_install_from_pkg
+
+- name: install | install borg binary from web
   get_url:
     dest: "/usr/local/bin/borg"
     checksum: "{{ borgbackup_checksum }}"
@@ -8,3 +15,11 @@
     mode: "0755"
     url: "{{ borgbackup_download_url }}"
   tags: borginstall
+  when: not borgbackup_install_from_pkg
+
+- name: install | install borgbackup package
+  package:
+    name: "{{ borgbackup_package }}"
+    state: present
+  tags: borginstall
+  when: borgbackup_install_from_pkg
