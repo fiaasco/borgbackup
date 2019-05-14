@@ -1,0 +1,4 @@
+---
+- name: "Install EPEL repo"
+  include_role:
+    name: geerlingguy.repo-epel
