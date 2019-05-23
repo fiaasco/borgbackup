@@ -6,6 +6,7 @@ borgbackup_ssh_key: "~{{ borgbackup_client_user }}/.ssh/id_borg_rsa"
 
 borgbackup_binary: borg
 borgbackup_install_from_pkg: false
+borgbackup_install_epel: true
 borgbackup_package: borgbackup
 
 borgbackup_version: "1.1.4"
