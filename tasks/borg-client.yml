@@ -18,6 +18,7 @@
     state: "present"
     line: 'export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"'
     create: true
+  no_log: true
 
 - name: client | disable strict key checking for backup servers
   blockinfile:
