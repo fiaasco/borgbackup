@@ -36,6 +36,8 @@ provisioner:
         borgbackup_passphrase: soo6Uabiex
   lint:
     name: ansible-lint
+    options:
+      x: ["204"]
 scenario:
   name: lamp
 verifier:

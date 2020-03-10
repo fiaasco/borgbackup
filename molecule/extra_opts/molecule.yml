@@ -48,6 +48,8 @@ provisioner:
           - "apt list"
   lint:
     name: ansible-lint
+    options:
+      x: ["204"]
 scenario:
   name: extra_opts
 verifier:

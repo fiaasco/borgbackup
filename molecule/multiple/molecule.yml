@@ -63,6 +63,8 @@ provisioner:
         borgbackup_passphrase: oiasdfoain
   lint:
     name: ansible-lint
+    options:
+      x: ["204"]
 scenario:
   name: multiple
 verifier:

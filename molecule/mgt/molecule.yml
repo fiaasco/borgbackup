@@ -68,6 +68,8 @@ provisioner:
         borgbackup_passphrase: Zuequei1ro
   lint:
     name: ansible-lint
+    options:
+      x: ["204"]
 scenario:
   name: mgt
 verifier:
