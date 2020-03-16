@@ -13,10 +13,13 @@ install:
   - pip install -r requirements.txt
 
 env:
-  - SCENARIO=lamp
-  - SCENARIO=extra_opts
-  - SCENARIO=mgt
-  - SCENARIO=multiple
+  - SCENARIO=default
+  - SCENARIO=centos
+  - SCENARIO=ubuntu
   - SCENARIO=clients
+
+#  - SCENARIO=lamp
+#  - SCENARIO=extra_opts
+#  - SCENARIO=multiple
 
 script: "molecule test --scenario-name $SCENARIO"
