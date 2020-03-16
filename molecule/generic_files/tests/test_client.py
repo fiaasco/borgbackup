@@ -2,7 +2,7 @@ import os
 import pytest
 from testinfra.utils.ansible_runner import AnsibleRunner
 
-testinfra_hosts = ["ansible://all:!borgbackup_servers"]
+testinfra_hosts = ["ansible://clients"]
 
 
 def test_log(host):

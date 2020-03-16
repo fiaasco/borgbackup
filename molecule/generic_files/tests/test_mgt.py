@@ -6,7 +6,7 @@ testinfra_hosts = ["ansible://borgbackup_management"]
 
 
 # to do read inventory variable : export BORG_PASSPHRASE="{{ borgbackup_passphrase }}"
-@pytest.mark.parametrize('client', AnsibleRunner(os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all:!borgbackup_management:!borgbackup_servers'))
+@pytest.mark.parametrize('client', AnsibleRunner(os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('clients'))
 def test_prune_script(host, client):
     prune = host.file("/root/prune.sh")
     assert prune.user == "root"

@@ -2,7 +2,7 @@ import os
 import pytest
 from testinfra.utils.ansible_runner import AnsibleRunner
 
-testinfra_hosts = ["ansible://all:!borgbackup_servers"]
+testinfra_hosts = ["ansible://clients"]
 
 
 def test_client_sample_file(host):
@@ -11,7 +11,7 @@ def test_client_sample_file(host):
 
 
 @pytest.mark.parametrize('server', AnsibleRunner(os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('borgbackup_servers'))
-def test_client_dir(host, server):
+def test_client_diff(host, server):
     command = host.run("diff -s /root/sample.txt /root/restore/%s/root/sample.txt" % server)
     assert command.rc == 0
     assert "Files /root/sample.txt and /root/restore/%s/root/sample.txt are identical" % server in command.stdout
