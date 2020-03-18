@@ -2,7 +2,7 @@
 
 if [ -z "$1" ] || [ ! -z "$2" ]
   then
-    printf "Possible: info | init | list | backup | mount \n\n"
+    printf "Possible: info | init | list | backup | mount | check \n\n"
 fi
 
 # Sourcing the backup-passphrase
@@ -103,3 +103,16 @@ if [ "$1" = "backup" ]
 
 fi
 
+if [ "$1" = "check" ]
+  then
+    if [ -z "$2" ]; then printf "Select the backup to check\n"; exit 1; fi
+{% for b in borgbackup_servers %}
+{% if b.type == 'hetzner' %}
+    REPOSITORY=ssh://{{ b.user }}@{{ b.fqdn }}:23/./{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% else %}
+    REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
+{% endif %}
+    /usr/local/bin/borg check {{ b.options }} -v $REPOSITORY::$2
+    exit 0
+{% endfor %}
+fi
