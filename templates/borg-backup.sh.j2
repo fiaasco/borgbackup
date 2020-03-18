@@ -27,16 +27,17 @@ fi
 
 if [ "$1" = "mount" ]
   then
-    if [ -z "$2" ]; then printf "Select the backup to mount\n"; exit 1; fi
-    if [ -z "$3" ]; then printf "Select the path to mount the backup on\n"; exit 1; fi
+    if [ -z "$2" ]; then printf "Select the backup-server\n"; exit 1; fi
+    if [ -z "$3" ]; then printf "Select the backup to mount\n"; exit 1; fi
+    if [ -z "$4" ]; then printf "Select the path to mount the backup on\n"; exit 1; fi
 {% for b in borgbackup_servers %}
 {% if b.type == 'hetzner' %}
     REPOSITORY=ssh://{{ b.user }}@{{ b.fqdn }}:23/./{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
 {% else %}
     REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
 {% endif %}
-    /usr/local/bin/borg mount {{ b.options }} $REPOSITORY::$2 $3
-    if [ "$?" = "0" ]; then printf "Backup mounted on $3, do not forget to unmount!\n"; fi
+    /usr/local/bin/borg mount {{ b.options }} $REPOSITORY::$3 $4
+    if [ "$?" = "0" ]; then printf "Backup mounted on $4, do not forget to unmount!\n"; fi
     exit 0
 {% endfor %}
 fi
