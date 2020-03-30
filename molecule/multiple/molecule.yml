@@ -11,9 +11,13 @@ platforms:
     image: debian:10
     networks:
       - name: multiple-borg
+    groups:
+      - clients
   - name: multiple-client-ubuntu-bionic
     hostname: multiple-client-ubuntu-bionic
     image: ubuntu:bionic
+    groups:
+      - clients
     networks:
       - name: multiple-borg
   - name: multiple-server-debian-10
