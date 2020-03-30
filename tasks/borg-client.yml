@@ -45,8 +45,6 @@
   delegate_to: "{{ item.fqdn }}"
   when: item.type == 'normal'
   with_items: "{{ borgbackup_servers }}"
-  vars:
-    ansible_python_interpreter: '/usr/bin/python3'
 
 - when: item.type in ['rsync.net','hetzner']
   block:
