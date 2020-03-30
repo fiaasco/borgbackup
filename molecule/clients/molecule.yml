@@ -118,6 +118,7 @@ provisioner:
       clients-debian-8:
         borgbackup_passphrase: aef1Iekasfs
       clients-centos-8:
+        ansible_python_interpreter: /usr/bin/python3
         borgbackup_passphrase: ASFQiejasdf
       clients-centos-7:
         borgbackup_passphrase: ASFQiejwasd
