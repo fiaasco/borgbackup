@@ -51,19 +51,7 @@
 
 - name: prepare lamp
   hosts: lamp
-  gather_facts: false
-  tasks:
-    - name: Install required packages
-      apt:
-        name:
-          - apache2
-          - mysql-server
-          - automysqlbackup
-        state: present
-      notify: start mysql
-  handlers:
-    - name: start mysql
-      service:
-        name: mysql
-        state: started
-        enabled: true
+  gather_facts: true
+  roles:
+    - role: fiaasco.apache2
+    - role: fiaasco.mariadb
