@@ -17,6 +17,8 @@ env:
   - SCENARIO=centos
   - SCENARIO=ubuntu
   - SCENARIO=clients
+  - SCENARIO=lamp
+  - SCENARIO=multiple
 
 #  - SCENARIO=lamp
 #  - SCENARIO=extra_opts
