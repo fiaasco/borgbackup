@@ -27,7 +27,7 @@ borgbackup_binary: "borg"
 # description: whether to install borg backup from package
 # type: bool
 borgbackup_install_from_pkg: false
-# description: whether to install the EPEL repository (EPEL required to install from package)
+# description: whether to install the EPEL repository (EPEL required to install from package on CentOS)
 # type: bool
 borgbackup_install_epel: false
 # description: name of package to install when borgbackup_install_from_pkg is true

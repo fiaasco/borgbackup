@@ -71,13 +71,13 @@ Be aware of the limitations of append-only mode: [pruned backups appear to be re
 
 *Make sure to check the configured defaults for this role, which contains the list of default locations being backed up in backup\_include.* Override this in your inventory where required.
 
-## Installing Borg from EPEL Package
+## Installing Borg from Package
 Borg can be installed from an EPEL package by setting the variable:
 ```
 borgbackup_install_from_pkg: true
 ```
 
-The EPEL repo must be present for this to succeed. To install the EPEL repo using the
+On CentOS the EPEL repo must be present for this to succeed. To install the EPEL repo using the
 [`geerlingguy.repo-epel`](https://galaxy.ansible.com/geerlingguy/repo-epel) role, set:
 ```
 borgbackup_install_epel: true
