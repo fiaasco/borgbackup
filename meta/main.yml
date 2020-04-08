@@ -1,6 +1,4 @@
 ---
-dependencies:
-  - geerlingguy.repo-epel
 
 galaxy_info:
   author: Luc Stroobant and Dieter Verhelst
@@ -23,4 +21,5 @@ galaxy_info:
     - borgbackup
     - fiaasco
 
-dependencies: []
+dependencies:
+  - geerlingguy.repo-epel
