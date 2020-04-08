@@ -1,0 +1,5 @@
+---
+- name: "Install EPEL repo"
+  include_role:
+    name: geerlingguy.repo-epel
+  when: borgbackup_install_epel

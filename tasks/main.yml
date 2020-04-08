@@ -1,4 +1,7 @@
 ---
+- include_tasks: setup-RedHat.yml
+  when: borgbackup_install_from_pkg and ansible_os_family == 'RedHat'
+
 # Due to inverse logic behaviour when searching for an item in an undefined list.
 - name: setting facts
   set_fact:
@@ -7,7 +10,7 @@
 
 - include_tasks: install.yml
   when: >
-    borgbackup_required == True or
+    borgbackup_required or
     inventory_hostname in borgbackup_servers_group
 
 - include_tasks: borg-server.yml
@@ -15,7 +18,7 @@
 
 - include_tasks: borg-client.yml
   when: >
-    borgbackup_required == True and
+    borgbackup_required and
     inventory_hostname not in borgbackup_servers_group
 
 - include_tasks: management.yml
