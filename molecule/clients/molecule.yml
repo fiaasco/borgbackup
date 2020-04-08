@@ -11,7 +11,21 @@ platforms:
       - name: clients-borg
     groups:
       - clients
+  - name: clients-ubuntu-bionic-pkg
+    hostname: clients-ubuntu-bionic
+    image: ubuntu:bionic
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
   - name: clients-ubuntu-xenial
+    hostname: clients-ubuntu-xenial
+    image: ubuntu:xenial
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-ubuntu-xenial-pkg
     hostname: clients-ubuntu-xenial
     image: ubuntu:xenial
     networks:
@@ -32,7 +46,21 @@ platforms:
       - name: clients-borg
     groups:
       - clients
+  - name: clients-debian-10-pkg
+    hostname: clients-debian-10
+    image: debian:10
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
   - name: clients-debian-9
+    hostname: clients-debian-9
+    image: debian:9
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-9-pkg
     hostname: clients-debian-9
     image: debian:9
     networks:
@@ -54,7 +82,23 @@ platforms:
     groups:
       - centos
       - clients
+  - name: clients-centos-8-pkg
+    hostname: clients-centos-8
+    image: centos:8
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
   - name: clients-centos-7
+    hostname: clients-centos-7
+    image: centos:7
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-centos-7-pkg
     hostname: clients-centos-7
     image: centos:7
     networks:
@@ -107,21 +151,40 @@ provisioner:
     host_vars:
       clients-ubuntu-bionic:
         borgbackup_passphrase: soo6Uabiex
+      clients-ubuntu-bionic-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: soo6Uabiexpkg
       clients-ubuntu-xenial:
         borgbackup_passphrase: ooFeila1ie
+      clients-ubuntu-xenial-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ooFeila1iepkg
       clients-ubuntu-trusty:
         borgbackup_passphrase: ooFeilaasfd
       clients-debian-10:
         borgbackup_passphrase: eewoo7paf6J
+      clients-debian-10-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: eewoo7paf6Jpkg
       clients-debian-9:
         borgbackup_passphrase: aef1Iekahpi
+      clients-debian-9-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: aef1Iekahpipkg
       clients-debian-8:
         borgbackup_passphrase: aef1Iekasfs
       clients-centos-8:
         ansible_python_interpreter: /usr/bin/python3
         borgbackup_passphrase: ASFQiejasdf
+      clients-centos-8-pkg:
+        ansible_python_interpreter: /usr/bin/python3
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ASFQiejasdfpkg
       clients-centos-7:
         borgbackup_passphrase: ASFQiejwasd
+      clients-centos-7-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ASFQiejwasdpkg
       clients-centos-6:
         borgbackup_passphrase: Ansdkfqooia
   lint:
