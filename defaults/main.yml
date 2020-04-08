@@ -21,6 +21,19 @@ borgbackup_checksum: "sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2d6a597c7
 # type: string
 borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"
 
+# description: name of binary to execute in scripts for borg backup
+# type: string
+borgbackup_binary: "borg"
+# description: whether to install borg backup from package
+# type: bool
+borgbackup_install_from_pkg: false
+# description: whether to install the EPEL repository (EPEL required to install from package on CentOS)
+# type: bool
+borgbackup_install_epel: false
+# description: name of package to install when borgbackup_install_from_pkg is true
+# type: string
+borgbackup_package: "borgbackup"
+
 # description: borg compression to use
 # choices:
 # type: string
