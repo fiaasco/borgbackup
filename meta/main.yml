@@ -1,6 +1,7 @@
 ---
 dependencies:
-  - geerlingguy.repo-epel
+  - name: geerlingguy.repo-epel
+    when: ansible_os_family == 'RedHat' and borgbackup_install_epel
 
 galaxy_info:
   author: Luc Stroobant and Dieter Verhelst
