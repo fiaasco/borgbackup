@@ -9,7 +9,11 @@ borgbackup_client_user: root
 
 # description: ssh key on the backup client to connect to the backup server
 # type: string
-borgbackup_ssh_key: "~{{ borgbackup_client_user }}/.ssh/id_borg_rsa"
+borgbackup_ssh_key: "~{{ borgbackup_client_user }}/.ssh/id_borg_{{ borgbackup_ssh_key_type }}"
+
+# description: ssh key type to use when generating new keys
+# type: string
+borgbackup_ssh_key_type: "rsa"
 
 # description: borg backup version to use
 # type: string
