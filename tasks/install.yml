@@ -10,7 +10,6 @@
       when: >
         not borgbackup_install_epel
         and ansible_distribution != 'Fedora'
-      tags: borginstall
 
     - name: "Install EPEL repo"
       include_role:
@@ -23,7 +22,6 @@
       package:
         name: "{{ borgbackup_package }}"
         state: present
-      tags: borginstall
 
 # Run borg binary web installation related tasks
 
@@ -32,7 +30,6 @@
     - name: install | set borg binary path
       set_fact:
         borgbackup_binary: "/usr/local/bin/borg"
-      tags: borginstall
 
     - name: install | install borg binary from web
       get_url:
@@ -42,4 +39,3 @@
         group: "{{ borgbackup_group }}"
         mode: "0755"
         url: "{{ borgbackup_download_url }}"
-      tags: borginstall
