@@ -114,6 +114,22 @@ platforms:
     groups:
       - centos
       - clients
+  - name: clients-fedora-31
+    hostname: clients-fedora-31
+    image: fedora:31
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-fedora-31-pkg
+    hostname: clients-fedora-31-pkg
+    image: fedora:31
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
   - name: clients-server-debian-10
     hostname: clients-server-debian-10
     image: debian:10
@@ -188,6 +204,11 @@ provisioner:
         borgbackup_passphrase: ASFQiejwasdpkg
       clients-centos-6:
         borgbackup_passphrase: Ansdkfqooia
+      clients-fedora-31:
+        borgbackup_passphrase: sdfqjqoais
+      clients-fedora-31-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: sdfqjqoaispkg
   lint:
     name: ansible-lint
     options:

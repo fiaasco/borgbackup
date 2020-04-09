@@ -74,6 +74,7 @@ provisioner:
       multiple-client-ubuntu-bionic:
         borgbackup_passphrase: lidafruhkj
       multiple-server-ubuntu-bionic:
+        borgbackup_install_from_pkg: true
         borgbackup_passphrase: oiasdfoain
   lint:
     name: ansible-lint
