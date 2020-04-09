@@ -44,6 +44,7 @@ provisioner:
     group_vars:
       all:
         borgbackup_appendonly: true
+        borgbackup_install_from_pkg: false
         borgbackup_servers:
           - fqdn: ubuntu-server-ubuntu-bionic
             user: borgds

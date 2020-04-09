@@ -49,6 +49,7 @@ provisioner:
     group_vars:
       all:
         borgbackup_appendonly: true
+        borgbackup_install_from_pkg: false
         borgbackup_servers:
           - fqdn: multiple-server-debian-10
             user: borgdj
