@@ -21,5 +21,4 @@ galaxy_info:
     - borgbackup
     - fiaasco
 
-dependencies:
-  - geerlingguy.repo-epel
+dependencies: []
