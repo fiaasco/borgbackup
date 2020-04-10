@@ -1,21 +1,31 @@
 ---
+
 # Due to inverse logic behaviour when searching for an item in an undefined list.
 - name: setting facts
   set_fact:
     borgbackup_servers_group: "{{ groups.borgbackup_servers | default([]) }} "
     borgbackup_management_group: "{{ groups.borgbackup_management | default([]) }}"
+  tags:
+    - always
 
-- include_tasks: install.yml
+- name: include installation tasks
+  include_tasks:
+    file: install.yml
+    apply:
+      tags:
+        - borginstall
   when: >
-    borgbackup_required == True or
+    borgbackup_required|bool or
     inventory_hostname in borgbackup_servers_group
+  tags:
+    - always
 
 - include_tasks: borg-server.yml
   when: inventory_hostname in borgbackup_servers_group
 
 - include_tasks: borg-client.yml
   when: >
-    borgbackup_required == True and
+    borgbackup_required|bool and
     inventory_hostname not in borgbackup_servers_group
 
 - include_tasks: management.yml

@@ -31,7 +31,7 @@ if [ "$1" = "info" ]; then
     if [ -z "$3" ] || {{ is_for_me(b, '$3') }}; then
         echo "Displaying info of archive $2 on {{ b.fqdn }} :"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg info -v {{ b.options }} $REPOSITORY::$2
+        {{ borgbackup_binary }} info -v {{ b.options }} $REPOSITORY::$2
     fi
 {% endfor %}
     exit 0
@@ -45,7 +45,7 @@ if [ "$1" = "mount" ]; then
     if {{ is_for_me(b, '$3') }}; then
         echo "Mounting archive $2 on {{ b.fqdn }} to $4"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg mount -v {{ b.options }} $REPOSITORY::$2 $4
+        {{ borgbackup_binary }} mount -v {{ b.options }} $REPOSITORY::$2 $4
         if [ "$?" = "0" ]; then echo "Success. Remember to unmount!"; else echo; fi
         exit 0
     fi
@@ -58,7 +58,7 @@ if [ "$1" = "list" ]; then
     if [ -z "$2" ] || {{ is_for_me(b, '$2')}}; then
         echo "Archives on {{ b.fqdn }} :"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg list -v {{ b.options }} $REPOSITORY
+        {{ borgbackup_binary }} list -v {{ b.options }} $REPOSITORY
     fi
 {% endfor %}
     exit 0
@@ -69,7 +69,7 @@ if [ "$1" = "init" ]; then
     if [ -z "$2" ] || {{ is_for_me(b, '$2')}}; then
         echo "Initialise repo on {{ b.fqdn }} :"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg init -v {{ b.options }} --encryption {{ borgbackup_encryption_mode }}{% if borgbackup_appendonly_repoconfig %} --append-only{% endif %} $REPOSITORY
+        {{ borgbackup_binary }} init -v {{ b.options }} --encryption {{ borgbackup_encryption_mode }}{% if borgbackup_appendonly_repoconfig %} --append-only{% endif %} $REPOSITORY
     fi
 {% endfor %}
     exit 0
@@ -87,7 +87,7 @@ if [ "$1" = "backup" ]; then
     if [ -z "$2" ] || {{ is_for_me(b, '$2')}}; then
         echo "Backing up to {{ b.fqdn }} :"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg create -v {{ b.options }} --stats --progress --compression {{ borgbackup_compression }} $REPOSITORY::$DATE \
+        {{ borgbackup_binary }} create -v {{ b.options }} --stats --progress --compression {{ borgbackup_compression }} $REPOSITORY::$DATE \
             {% for dir in borgbackup_include %} '{{ dir }}'{% endfor %}
             {%- if automysql.stat.isdir is defined and automysql.stat.isdir | bool %} '/var/lib/automysqlbackup'{% endif %} \
             {% for dir in borgbackup_exclude %} --exclude '{{ dir }}'{% endfor %}
@@ -96,7 +96,7 @@ if [ "$1" = "backup" ]; then
 
 {%     if not borgbackup_appendonly %}
         echo "Pruning old backups on {{ b.fqdn }} :"
-        /usr/local/bin/borg prune -v {{ b.options }}{{
+        {{ borgbackup_binary }} prune -v {{ b.options }}{{
             " -H " ~ borgbackup_retention.hourly ~
             " -d " ~ borgbackup_retention.daily ~
             " -w " ~ borgbackup_retention.weekly ~
@@ -121,7 +121,7 @@ if [ "$1" = "check" ]; then
     if [ -z "$3" ] || {{ is_for_me(b, '$3') }}; then
         echo "Checking consistency of archive $2 on {{ b.fqdn }} :"
         REPOSITORY="{{ repository(b, inventory_hostname) }}"
-        /usr/local/bin/borg check -v {{ b.options }} $REPOSITORY::$2
+        {{ borgbackup_binary }} check -v {{ b.options }} $REPOSITORY::$2
     fi
 {% endfor %}
     exit 0

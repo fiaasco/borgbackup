@@ -13,9 +13,8 @@ if [ "$1" = "verify" ]
     REPOSITORY={{ b.user }}@{{ b.fqdn }}:{{ b.home }}{{ b.pool }}/{{ inventory_hostname }}
 {% endif %}
     printf "verifying on {{ b.fqdn }} :\n"
-    /usr/local/bin/borg extract --list --dry-run $REPOSITORY::$last_backup root/sample.txt
+    borg extract --list --dry-run $REPOSITORY::$last_backup root/sample.txt
 {% endfor %}
-    exit 0
 fi
 
 if [ "$1" = "restore" ]
@@ -30,7 +29,6 @@ if [ "$1" = "restore" ]
     rm -rf /root/restore/{{ b.fqdn }}
     mkdir -p /root/restore/{{ b.fqdn }}
     cd /root/restore/{{ b.fqdn }}
-    /usr/local/bin/borg extract $REPOSITORY::$last_backup root/sample.txt
+    borg extract $REPOSITORY::$last_backup root/sample.txt
 {% endfor %}
-    exit 0
 fi

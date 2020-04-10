@@ -24,7 +24,7 @@ echo "Pruning old backups of {{ h }} :"
 {%         for b in hostvars[h].borgbackup_servers %}
 echo "  on {{ b.fqdn }} :"
 REPOSITORY="{{ repository(b, h) }}"
-/usr/local/bin/borg prune -v $REPOSITORY {{ b.options }}{{
+{{ borgbackup_binary }} prune -v $REPOSITORY {{ b.options }}{{
     " -H " ~ hostvars[h].borgbackup_retention.hourly ~
     " -d " ~ hostvars[h].borgbackup_retention.daily ~
     " -w " ~ hostvars[h].borgbackup_retention.weekly ~
