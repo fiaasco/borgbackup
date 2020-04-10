@@ -164,7 +164,6 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
-        borgbackup_install_from_pkg: false
     host_vars:
       clients-ubuntu-bionic:
         borgbackup_passphrase: soo6Uabiex
