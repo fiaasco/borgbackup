@@ -24,7 +24,7 @@
           - openssh-clients
 
 - name: prepare debian-based backupservers
-  hosts: borgbackup_servers
+  hosts: borgbackup_servers:!centos
   gather_facts: false
   tasks:
     - name: install required packages
@@ -34,21 +34,24 @@
     - name: start ssh - Debian Server
       command: service ssh start
 
-- name: prepare lamp
-  hosts: lamp
+- name: prepare centos-based backupservers
+  hosts: borgbackup_servers:&centos
   gather_facts: false
   tasks:
-    - name: Install required packages
-      apt:
+    - name: install required packages
+      yum:
         name:
-          - apache2
-          - mysql-server
-          - automysqlbackup
-        state: present
-      notify: start mysql
-  handlers:
-    - name: start mysql
-      service:
-        name: mysql
-        state: started
-        enabled: true
+          - openssh-server
+    - name: remove nologin
+      file:
+        dest: /run/nologin
+        state: absent
+    - name: start ssh - Centos Server
+      command: systemctl start sshd
+
+- name: prepare lamp
+  hosts: lamp
+  gather_facts: true
+  roles:
+    - role: fiaasco.apache2
+    - role: fiaasco.mariadb
