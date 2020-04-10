@@ -3,39 +3,55 @@ driver:
   name: docker
 lint:
   name: yamllint
+scenario:
+  name: centos
 platforms:
-  - name: ${MOLECULE_SCENARIO_NAME}-cds
-    hostname: ${MOLECULE_SCENARIO_NAME}-cds
-    image: debian:stretch
+  - name: centos-client-centos-8
+    hostname: centos-client-centos-8
+    image: centos:8
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cub
-    hostname: ${MOLECULE_SCENARIO_NAME}-cub
-    image: ubuntu:bionic
-    networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-sds
-    hostname: ${MOLECULE_SCENARIO_NAME}-sds
-    image: debian:stretch
-    networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
+      - name: centos-borg
     groups:
-      - borgbackup_servers
-  - name: ${MOLECULE_SCENARIO_NAME}-mds
-    hostname: ${MOLECULE_SCENARIO_NAME}-mds
-    image: debian:stretch
+      - centos
+      - clients
+  - name: centos-server-centos-8
+    hostname: centos-server-centos-8
+    image: centos:8
+    command: /lib/systemd/systemd
+    privileged: true
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
+      - name: centos-borg
+    groups:
+      - centos
+      - borgbackup_servers
+  - name: centos-management-centos-8
+    hostname: centos-management-centos-8
+    command: /lib/systemd/systemd
+    privileged: true
+    image: centos:8
+    networks:
+      - name: centos-borg
     groups:
       - borgbackup_management
+      - centos
+      - clients
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+      gather_timeout: 30
+      interpreter_python: auto
+      jinja2_extensions: jinja2.ext.do
+      timeout: 30
+    ssh_connection:
+      pipelining: true
   inventory:
     group_vars:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: ${MOLECULE_SCENARIO_NAME}-sds
+          - fqdn: centos-server-centos-8
             user: borgds
             type: normal
             home: /var/backup/
@@ -47,12 +63,13 @@ provisioner:
           weekly: 4
           monthly: 6
           yearly: 1
+        borgbackup_management_station: centos-management-centos-8
         borgbackup_include:
           - "/etc"
           - "/root"
           - "/var/log"
           - "/home"
-        borgbackup_management_station: ${MOLECULE_SCENARIO_NAME}-mds
+        borgbackup_install_from_pkg: false
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
@@ -60,16 +77,14 @@ provisioner:
         borgbackup_management_sshkey: |
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
     host_vars:
-      ${MOLECULE_SCENARIO_NAME}-cds:
+      centos-client-centos-8:
         borgbackup_passphrase: soo6Uabiex
-      ${MOLECULE_SCENARIO_NAME}-cub:
-        borgbackup_passphrase: iousheafqj
-      ${MOLECULE_SCENARIO_NAME}-mds:
-        borgbackup_passphrase: Zuequei1ro
+      centos-management-centos-8:
+        borgbackup_passphrase: 798uoknakjla
   lint:
     name: ansible-lint
-scenario:
-  name: mgt
+    options:
+      x: ["204"]
 verifier:
   name: testinfra
   options:

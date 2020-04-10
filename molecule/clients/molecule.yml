@@ -4,55 +4,156 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: ${MOLECULE_SCENARIO_NAME}-cub
-    hostname: ${MOLECULE_SCENARIO_NAME}-cub
+  - name: clients-ubuntu-bionic
+    hostname: clients-ubuntu-bionic
     image: ubuntu:bionic
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cux
-    hostname: ${MOLECULE_SCENARIO_NAME}-cux
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-ubuntu-bionic-pkg
+    hostname: clients-ubuntu-bionic
+    image: ubuntu:bionic
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-ubuntu-xenial
+    hostname: clients-ubuntu-xenial
     image: ubuntu:xenial
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cds
-    hostname: ${MOLECULE_SCENARIO_NAME}-cds
-    image: debian:stretch
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-ubuntu-xenial-pkg
+    hostname: clients-ubuntu-xenial
+    image: ubuntu:xenial
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cdj
-    hostname: ${MOLECULE_SCENARIO_NAME}-cdj
-    image: debian:jessie
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-ubuntu-trusty
+    hostname: clients-ubuntu-trusty
+    image: ubuntu:trusty
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
-  - name: ${MOLECULE_SCENARIO_NAME}-cc7
-    hostname: ${MOLECULE_SCENARIO_NAME}-cc7
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-10
+    hostname: clients-debian-10
+    image: debian:10
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-10-pkg
+    hostname: clients-debian-10
+    image: debian:10
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-9
+    hostname: clients-debian-9
+    image: debian:9
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-9-pkg
+    hostname: clients-debian-9
+    image: debian:9
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-debian-8
+    hostname: clients-debian-8
+    image: debian:8
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-centos-8
+    hostname: clients-centos-8
+    image: centos:8
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-centos-8-pkg
+    hostname: clients-centos-8
+    image: centos:8
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-centos-7
+    hostname: clients-centos-7
     image: centos:7
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
+      - name: clients-borg
     groups:
       - centos
-  - name: ${MOLECULE_SCENARIO_NAME}-cc6
-    hostname: ${MOLECULE_SCENARIO_NAME}-cc6
+      - clients
+  - name: clients-centos-7-pkg
+    hostname: clients-centos-7
+    image: centos:7
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-centos-6
+    hostname: clients-centos-6
     image: centos:6
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
+      - name: clients-borg
     groups:
       - centos
-  - name: ${MOLECULE_SCENARIO_NAME}-sds
-    hostname: ${MOLECULE_SCENARIO_NAME}-sds
-    image: debian:stretch
+      - clients
+  - name: clients-fedora-31
+    hostname: clients-fedora-31
+    image: fedora:31
     networks:
-      - name: ${MOLECULE_SCENARIO_NAME}-borg
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-fedora-31-pkg
+    hostname: clients-fedora-31-pkg
+    image: fedora:31
+    networks:
+      - name: clients-borg
+    groups:
+      - centos
+      - clients
+  - name: clients-server-debian-10
+    hostname: clients-server-debian-10
+    image: debian:10
+    networks:
+      - name: clients-borg
     groups:
       - borgbackup_servers
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+      gather_timeout: 30
+      interpreter_python: auto
+      jinja2_extensions: jinja2.ext.do
+      timeout: 30
+    ssh_connection:
+      pipelining: true
   inventory:
     group_vars:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: ${MOLECULE_SCENARIO_NAME}-sds
+          - fqdn: clients-server-debian-10
             user: borgds
             type: normal
             home: /var/backup/
@@ -63,21 +164,55 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
+        borgbackup_install_from_pkg: false
     host_vars:
-      ${MOLECULE_SCENARIO_NAME}-cub:
+      clients-ubuntu-bionic:
         borgbackup_passphrase: soo6Uabiex
-      ${MOLECULE_SCENARIO_NAME}-cux:
+      clients-ubuntu-bionic-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: soo6Uabiexpkg
+      clients-ubuntu-xenial:
         borgbackup_passphrase: ooFeila1ie
-      ${MOLECULE_SCENARIO_NAME}-cds:
+      clients-ubuntu-xenial-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ooFeila1iepkg
+      clients-ubuntu-trusty:
+        borgbackup_passphrase: ooFeilaasfd
+      clients-debian-10:
         borgbackup_passphrase: eewoo7paf6J
-      ${MOLECULE_SCENARIO_NAME}-cdj:
+      clients-debian-10-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: eewoo7paf6Jpkg
+      clients-debian-9:
         borgbackup_passphrase: aef1Iekahpi
-      ${MOLECULE_SCENARIO_NAME}-cc7:
+      clients-debian-9-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: aef1Iekahpipkg
+      clients-debian-8:
+        borgbackup_passphrase: aef1Iekasfs
+      clients-centos-8:
+        ansible_python_interpreter: /usr/bin/python3
+        borgbackup_passphrase: ASFQiejasdf
+      clients-centos-8-pkg:
+        ansible_python_interpreter: /usr/bin/python3
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ASFQiejasdfpkg
+      clients-centos-7:
         borgbackup_passphrase: ASFQiejwasd
-      ${MOLECULE_SCENARIO_NAME}-cc6:
+      clients-centos-7-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: ASFQiejwasdpkg
+      clients-centos-6:
         borgbackup_passphrase: Ansdkfqooia
+      clients-fedora-31:
+        borgbackup_passphrase: sdfqjqoais
+      clients-fedora-31-pkg:
+        borgbackup_install_from_pkg: true
+        borgbackup_passphrase: sdfqjqoaispkg
   lint:
     name: ansible-lint
+    options:
+      x: ["204"]
 scenario:
   name: clients
 verifier:

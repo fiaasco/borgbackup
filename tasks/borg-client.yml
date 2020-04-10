@@ -11,6 +11,8 @@
   command: "cat {{ borgbackup_ssh_key }}.pub"
   register: sshkey
   changed_when: false
+  tags:
+    - skip_ansible_lint
 
 - name: client | write passphrase
   lineinfile:
@@ -34,43 +36,47 @@
         {% endif %}
   with_items: "{{ borgbackup_servers }}"
 
+- debug: msg="{{ sshkey.stdout }}"
+
 - name: client | put sshpubkey on the normal backupserver
   authorized_key:
     user: "{{ item.user }}"
     key: "{{ sshkey.stdout }}"
-    key_options: 'command="cd {{ item.home }}{{ item.pool }}/{{ inventory_hostname }};borg serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.home }}/{{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc' # noqa 204 (Line has to be this long for valid formatting)
+    key_options: 'command="cd {{ item.home }}{{ item.pool }}/{{ inventory_hostname }};borg serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.home }}/{{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'  # noqa 204 (Line has to be this long for valid formatting)
   delegate_to: "{{ item.fqdn }}"
   when: item.type == 'normal'
   with_items: "{{ borgbackup_servers }}"
 
-# rsync.net and hetzner have no python, so we can only use raw to manage ssh keys - workaround with local tmp file
-- name: client | get authorized_keys file
-  raw: scp {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys
-  delegate_to: localhost
-  become: false
-  when: item.type in ['rsync.net','hetzner']
-  with_items: "{{ borgbackup_servers }}"
-  changed_when: false
+- when: item.type in ['rsync.net','hetzner']
+  block:
+    # rsync.net and hetzner have no python, so we can only use raw to manage ssh keys - workaround with local tmp file
+    - name: client | get authorized_keys file
+      raw: scp {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys
+      delegate_to: localhost
+      become: false
+      with_items: "{{ borgbackup_servers }}"
+      changed_when: false
+      tags:
+        - skip_ansible_lint
 
-- name: client | modify local rsync.net/hetzner authorized_keys
-  authorized_key:
-    user: "{{ ansible_user_id }}"
-    key: "{{ sshkey.stdout }}"
-    key_options: 'command="cd {{ item.pool }}/{{ inventory_hostname }};/usr/local/bin/borg1 serve {% if borgbackup_appendonly %}--append-only {% endif %} --restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc' # noqa 204 (Line has to be this long for valid formatting)
-    path: "/tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys"
-    manage_dir: false
-  delegate_to: localhost
-  become: false
-  when: item.type in ['rsync.net','hetzner']
-  with_items: "{{ borgbackup_servers }}"
-  register: authkeys
+    - name: client | modify local rsync.net/hetzner authorized_keys
+      authorized_key:
+        user: "{{ ansible_user_id }}"
+        key: "{{ sshkey.stdout }}"
+        key_options: 'command="cd {{ item.pool }}/{{ inventory_hostname }};/usr/local/bin/borg1 serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'  # noqa 204 (Line has to be this long for valid formatting)
+        path: "/tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys"
+        manage_dir: false
+      delegate_to: localhost
+      become: false
+      with_items: "{{ borgbackup_servers }}"
+      register: authkeys
 
-- name: client | upload local authorized_keys to rsync.net / hetzner
-  raw: scp /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys
-  delegate_to: localhost
-  become: false
-  when: item.type in ['rsync.net','hetzner'] and authkeys.changed
-  with_items: "{{ borgbackup_servers }}"
+    - name: client | upload local authorized_keys to rsync.net / hetzner
+      raw: scp /tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys {{ item.user }}@{{ item.fqdn }}:.ssh/authorized_keys
+      delegate_to: localhost
+      become: false
+      when: authkeys.changed
+      with_items: "{{ borgbackup_servers }}"
 
 - name: client | remove tmp authorized_keys files
   file:
@@ -81,9 +87,12 @@
   with_items: "{{ borgbackup_servers }}"
   when: authkeys.changed
   changed_when: false
+  tags:
+    - skip_ansible_lint
 
 - name: client | check for mysql
-  stat: path=/var/lib/automysqlbackup
+  stat:
+    path: /var/lib/automysqlbackup
   register: automysql
 
 - name: client | put wrapper script
@@ -119,4 +128,4 @@
     state: "present"
     backrefs: true
     create: false
-  when: automysql.stat.isdir is defined and automysql.stat.isdir
+  when: automysql.stat.isdir is defined and automysql.stat.isdir|bool

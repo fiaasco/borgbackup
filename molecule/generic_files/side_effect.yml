@@ -1,4 +1,11 @@
 ---
+
+- hosts: lamp
+  gather_facts: false
+  tasks:
+    - name: run a mysql backup
+      command: automysqlbackup
+
 - hosts: all:!borgbackup_servers
   gather_facts: false
   tasks:

@@ -37,7 +37,7 @@ borgbackup_package: "borgbackup"
 # description: borg compression to use
 # choices:
 # type: string
-borgbackup_compression: "auto,zlib,6"
+borgbackup_compression: "zlib,6"
 
 # description: borg encryption mode to use
 #              make sure you backup your client keys or switch to a different mode
