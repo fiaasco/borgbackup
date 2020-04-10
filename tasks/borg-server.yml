@@ -21,7 +21,7 @@
 
 - name: server | create directories
   file:
-    path: "{{ item.home}}{{ item.pool }}"
+    path: "{{ item.home }}{{ item.pool }}"
     state: "directory"
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
