@@ -92,19 +92,22 @@ ansible-playbook -i inventory/test backup.yml -l client1.fiaas.co
 
 All role-functionality is tested using molecule using a local docker connection to avoid complexity.
 For more information on molecule testing, see [`https://molecule.readthedocs.io/en/latest/`](https://molecule.readthedocs.io/en/latest/).
-Tests itself are written using Testinfra, see [`https://testinfra.readthedocs.io/en/latest/`](https://testinfra.readthedocs.io/en/latest/).
+Tests are written using Testinfra, see [`https://testinfra.readthedocs.io/en/latest/`](https://testinfra.readthedocs.io/en/latest/).
 
-Because of the variety of scenarios, tests itself are stored in [`molecule/generic_files`](molecule/generic_files) optimising re-usability. They can be applied to hosts/groups using groups.
+Because of the variety of scenarios, tests themselves are stored in [`molecule/generic_files`](molecule/generic_files) to optimise re-usability. They can be applied to hosts/groups using groups.
 
 Getting started with testing is as easy as doing the following on any machine with a local docker engine running:
+*(from within the root directory of this role)*
 
-```
-pip install -r requirements.txt
-molecule test
+```bash
+$ virtualenv -p python3 ~/.venv/fiaasco-borgbackup-docu
+$ source ~/.venv/fiaasco-borgbackup-docu/bin/activate
+$ pip3 install -r requirements.txt
+$ molecule test
 ```
 
-Make sure to test all functionality is tested. Failing builds will not be accepted in PR review.
-Every test-scenario runs at least a full deployment with a backup server, performs a backup, executes a restore-test and various other minor tests ensuring functionality stability.
+Make sure to test all functionality. Failing builds will not be accepted in PR review!
+Every test-scenario runs at least a full deployment with a backup server, performs a backup, executes a restore-test and various other minor tests, ensuring functional stability.
 
 ### Test Scenarios
 
@@ -113,21 +116,21 @@ Every test-scenario runs at least a full deployment with a backup server, perfor
 molecule test
 ```
 
-This scenario tests the most common functionality on Debian platforms. It runs a backup server and the latest 2 Debian official releases.
+This scenario tests the most common functionality on Debian platforms. It runs a backup server on the 2 latest official Debian releases.
 
 #### centos
 ```
 molecule test -s centos
 ```
 
-This scenario tests the most common functionality on EPEL platforms. It runs a backup server and the latest 2 CentOS official releases.
+This scenario tests the most common functionality on EPEL platforms. It runs a backup server on the 2 latest official CentOS releases.
 
 #### ubuntu
 ```
 molecule test -s ubuntu
 ```
 
-This scenario tests the most common functionality on Ubuntu platforms. It runs a backup server and the latest 2 Ubuntu official releases.
+This scenario tests the most common functionality on Ubuntu platforms. It runs a backup server on the 2 latest official Ubuntu releases.
 
 #### multiple
 ```
@@ -141,7 +144,7 @@ This scenario ensures role functionality works when 2 or more backup-servers are
 molecule test -s lamp
 ```
 
-Testing functionality when fiaas.lamp role is applied to a machine ensuring compatibility with a 'Fiaas'-host. See molecule.yml for details.
+Testing functionality when `fiaas.lamp` role is applied to a machine, ensuring compatibility with a 'Fiaas'-host. See [`molecule.yml`](molecule/lamp/molecule.yml) for details.
 
 #### clients
 ```
@@ -152,4 +155,4 @@ This test is the biggest scenario as it contains testing for all supported platf
 
 ## Further reading
 * [Borg documentation](https://borgbackup.readthedocs.io/en/stable/)
-* [Append only mode information](http://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode)
+* [Append-only mode information](http://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode)
