@@ -3,9 +3,9 @@
   user:
     name: "{{ borgbackup_client_user }}"
     generate_ssh_key: true
-    ssh_key_bits: 2048
     ssh_key_file: "{{ borgbackup_ssh_key }}"
-    ssh_key_type: rsa
+    ssh_key_bits: "{{ borgbackup_ssh_key_bits }}"
+    ssh_key_type: "{{ borgbackup_ssh_key_type }}"
 
 - name: client | fetch ssh-key
   command: "cat {{ borgbackup_ssh_key }}.pub"
