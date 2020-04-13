@@ -49,7 +49,6 @@ provisioner:
     group_vars:
       all:
         borgbackup_appendonly: true
-        borgbackup_install_from_pkg: false
         borgbackup_servers:
           - fqdn: multiple-server-debian-10
             user: borgdj
@@ -70,6 +69,7 @@ provisioner:
           - "/home"
     host_vars:
       multiple-client-debian-10:
+        borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiex
       multiple-client-ubuntu-bionic:
         borgbackup_passphrase: lidafruhkj

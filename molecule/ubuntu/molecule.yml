@@ -44,7 +44,6 @@ provisioner:
     group_vars:
       all:
         borgbackup_appendonly: true
-        borgbackup_install_from_pkg: false
         borgbackup_servers:
           - fqdn: ubuntu-server-ubuntu-bionic
             user: borgds
@@ -81,6 +80,7 @@ provisioner:
         borgbackup_post_commands:
           - "apt list"
       ubuntu-management-ubuntu-bionic:
+        borgbackup_install_from_pkg: true
         borgbackup_passphrase: 798uoknakjla
         borgbackup_include:
           - "/etc"
