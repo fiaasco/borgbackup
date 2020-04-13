@@ -4,7 +4,6 @@
     src: prune.sh.j2
     dest: "~{{ borgbackup_management_user }}/prune.sh"
     owner: "{{ borgbackup_management_user }}"
-    group: "{{ borgbackup_management_user }}"
     mode: 0700
 
 - name: management | put management sshpubkey on the normal backupserver
