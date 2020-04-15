@@ -14,7 +14,7 @@ ssh://{{ b.user }}@{{ b.fqdn }}:23/./{{ b.home }}{{ b.pool }}/{{ h }}
 # Don't put it on the backup server, it contains all borg secrets!
 
 {% for h in groups['all'] %}
-{%     if hostvars[h].borgbackup_required and inventory_hostname == hostvars[h].borgbackup_management_station %}
+{%     if hostvars[h].borgbackup_required | default(False) and inventory_hostname == hostvars[h].borgbackup_management_station %}
 ########
 # Host : {{ h }}
 ########
