@@ -1,12 +1,13 @@
 [![Build Status](https://travis-ci.com/FiaasCo/borgbackup.svg?branch=master)](https://travis-ci.com/FiaasCo/borgbackup)
 
 # Borg backup role
+
 This role installs Borg backup on borgbackup\_servers and clients. The role contains a wrapper-script 'borg-backup' to ease the usage on the client. Supported options include borg-backup info | init | list | backup | mount. Automysqlbackup will run as pre-backup command if it's installed.
 The role supports both self hosted and offsite backup-storage such as rsync.net and hetzner storage box as Borg server.
 
 It's possible to configure append-only repositories to secure the backups against deletion from the client.
 
-Ansible 2.4 or higher is required to run this role.
+Ansible 2.9 or higher is required to run this role.
 
 ## Required variables
 Define a group borgbackup\_servers in your inventory with one or multiple hosts. The group borgbackup\_management is only necessary if you want to enable append-only mode and prune the backups from a secured hosts.
@@ -80,11 +81,7 @@ Borg can be installed from a package by setting the variable:
 borgbackup_install_from_pkg: true
 ```
 
-On CentOS/RedHat the EPEL repo must be present for this to succeed. To install the EPEL repo using the
-[`geerlingguy.repo-epel`](https://galaxy.ansible.com/geerlingguy/repo-epel) role, set:
-```
-borgbackup_install_epel: true
-```
+On EPEL systems (RedHat/CentOS) the epel-release repository will be added automatically using [`geerlingguy.repo-epel`](https://galaxy.ansible.com/geerlingguy/repo-epel) role.
 
 ## Usage
 
@@ -94,6 +91,71 @@ ansible-playbook -i inventory/test backup.yml -l backup1.fiaas.co
 ansible-playbook -i inventory/test backup.yml -l client1.fiaas.co
 ```
 
+## Testing
+
+All role-functionality is tested using molecule using a local docker connection to avoid complexity.
+For more information on molecule testing, see [`https://molecule.readthedocs.io/en/latest/`](https://molecule.readthedocs.io/en/latest/).
+Tests are written using Testinfra, see [`https://testinfra.readthedocs.io/en/latest/`](https://testinfra.readthedocs.io/en/latest/).
+
+Because of the variety of scenarios, tests themselves are stored in [`molecule/generic_files`](molecule/generic_files) to optimise re-usability. They can be applied to hosts/groups using groups.
+
+Getting started with testing is as easy as doing the following on any machine with a local docker engine running:
+*(from within the root directory of this role)*
+
+```bash
+$ virtualenv -p python3 ~/.venv/fiaasco-borgbackup-docu
+$ source ~/.venv/fiaasco-borgbackup-docu/bin/activate
+$ pip3 install -r requirements.txt
+$ molecule test
+```
+
+Make sure to test all functionality. Failing builds will not be accepted in PR review!
+Every test-scenario runs at least a full deployment with a backup server, performs a backup, executes a restore-test and various other minor tests, ensuring functional stability.
+
+### Test Scenarios
+
+#### default
+```
+molecule test
+```
+
+This scenario tests the most common functionality on Debian platforms. It runs a backup server on the 2 latest official Debian releases.
+
+#### centos
+```
+molecule test -s centos
+```
+
+This scenario tests the most common functionality on EPEL platforms. It runs a backup server on the 2 latest official CentOS releases.
+
+#### ubuntu
+```
+molecule test -s ubuntu
+```
+
+This scenario tests the most common functionality on Ubuntu platforms. It runs a backup server on the 2 latest official Ubuntu releases.
+
+#### multiple
+```
+molecule test -s multiple
+```
+
+This scenario ensures role functionality works when 2 or more backup-servers are defined.
+
+#### lamp
+```
+molecule test -s lamp
+```
+
+Testing functionality when `fiaas.lamp` role is applied to a machine, ensuring compatibility with a 'Fiaas'-host. See [`molecule.yml`](molecule/lamp/molecule.yml) for details.
+
+#### clients
+```
+molecule test -s clients
+```
+
+This test is the biggest scenario as it contains testing for all supported platforms and combinations. Eg. Debian 8 + 9 + 10, Fedora 31, ... As we all run different systems and platforms, this can be extended safely provided this scenario keeps running!
+
 ## Further reading
 * [Borg documentation](https://borgbackup.readthedocs.io/en/stable/)
-* [Append only mode information](http://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode)
+* [Append-only mode information](http://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode)

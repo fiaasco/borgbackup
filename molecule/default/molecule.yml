@@ -51,7 +51,6 @@ provisioner:
             home: /var/backup/
             pool: repos
             options: ""
-        borgbackup_install_from_pkg: false
         borgbackup_retention:
           hourly: 12
           daily: 7
@@ -76,6 +75,7 @@ provisioner:
           - "/var/log"
           - "/home"
           - "/var/cache"
+        borgbackup_install_from_pkg: true
         borgbackup_exclude:
           - "/var/cache/apt"
         borgbackup_pre_commands:

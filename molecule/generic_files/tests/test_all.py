@@ -3,7 +3,7 @@ testinfra_hosts = ["ansible://all"]
 
 def test_borg_package(host):
     ans_dict = host.ansible.get_variables()
-    package = ans_dict['borgbackup_install_from_pkg']
+    package = ans_dict.get('borgbackup_install_from_pkg', False)
     if package is True:
         borg = host.package("borgbackup")
         assert borg.is_installed

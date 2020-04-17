@@ -37,7 +37,6 @@ provisioner:
       all:
         stage: docker
         borgbackup_appendonly: true
-        borgbackup_install_from_pkg: false
         borgbackup_servers:
           - fqdn: lamp-server-debian-10
             user: borgds
