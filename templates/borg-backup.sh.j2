@@ -92,7 +92,7 @@ if [ "$1" = "backup" ]; then
             {%- if automysql.stat.isdir is defined and automysql.stat.isdir | bool %} '/var/lib/automysqlbackup'{% endif %} \
             {% for dir in borgbackup_exclude %} --exclude '{{ dir }}'{% endfor %}
 
-        if [ "$?" -eq "0" ]; then echo "Backup ($DATE) succeeded to {{ b.fqdn }}" >> /var/log/borg-backup.log; fi
+        if [ "$?" -eq "0" ]; then echo "Backup succeeded on $DATE to {{ b.fqdn }}" >> /var/log/borg-backup.log; fi
 
 {%     if not borgbackup_appendonly %}
         echo "Pruning old backups on {{ b.fqdn }} :"

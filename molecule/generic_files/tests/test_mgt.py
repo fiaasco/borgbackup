@@ -14,5 +14,5 @@ def test_prune_script(host, client):
     assert prune.mode == 0o700
     assert prune.contains("/usr/local/bin/borg prune")
     assert prune.contains("export BORG_PASSPHRASE=")
-    assert prune.contains("Host: %s" % client)
+    assert prune.contains("Host : %s" % client)
     assert prune.contains(":/var/backup/repos/%s" % client)

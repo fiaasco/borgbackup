@@ -45,6 +45,8 @@ provisioner:
             home: /var/backup/
             pool: repos
             options: ""
+      clients:
+        borgbackup_required: true
     host_vars:
       lamp-client-debian-10:
         apache2_adminhost_https: false
