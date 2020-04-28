@@ -67,8 +67,6 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
-      clients:
-        borgbackup_required: true
     host_vars:
       multiple-client-debian-10:
         borgbackup_install_from_pkg: true

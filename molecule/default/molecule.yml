@@ -58,8 +58,6 @@ provisioner:
           monthly: 6
           yearly: 1
         borgbackup_management_station: default-management-debian-10
-      clients:
-        borgbackup_required: true
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
