@@ -1,27 +1,28 @@
 ---
-sudo: required
-
 language: python
+services: docker
 
-services:
-  - docker
+env:
+  - SCENARIO: default
+  - SCENARIO: centos
+  - SCENARIO: ubuntu
+  - SCENARIO: clients
+  - SCENARIO: lamp
+  - SCENARIO: multiple
 
-before_install:
-  - sudo apt-get -qq update
+#  - SCENARIO: lamp
+#  - SCENARIO: extra_opts
+#  - SCENARIO: multiple
 
 install:
   - pip install -r requirements.txt
 
-env:
-  - SCENARIO=default
-  - SCENARIO=centos
-  - SCENARIO=ubuntu
-  - SCENARIO=clients
-  - SCENARIO=lamp
-  - SCENARIO=multiple
+before_script:
+  # Rename current directory to allow forked tests to work.
+  - mv ../$(basename $PWD) ../borgbackup
 
-#  - SCENARIO=lamp
-#  - SCENARIO=extra_opts
-#  - SCENARIO=multiple
+script:
+  - molecule test --scenario-name $SCENARIO
 
-script: "molecule test --scenario-name $SCENARIO"
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
