@@ -69,7 +69,6 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
-        borgbackup_install_from_pkg: false
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
@@ -78,6 +77,7 @@ provisioner:
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
     host_vars:
       centos-client-centos-8:
+        borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiex
       centos-management-centos-8:
         borgbackup_passphrase: 798uoknakjla
