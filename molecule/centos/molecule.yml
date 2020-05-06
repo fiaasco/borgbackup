@@ -69,7 +69,6 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
-        borgbackup_install_from_pkg: false
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
