@@ -9,8 +9,8 @@
     - always
 
 - name: include installation tasks
-  include_tasks:
-    file: install.yml
+  include_tasks: install.yml
+  args:
     apply:
       tags:
         - borginstall
