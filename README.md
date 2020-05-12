@@ -22,19 +22,22 @@ supersecurehost
 Define group- or hostvars for your backup endpoints and retention:
 ```
 borgbackup_servers:
-  - fqdn: backup1.fiaas.co
+  - id: fiaas
+    fqdn: backup1.fiaas.co
     user: borgbackup
     type: normal
     home: /backup/
     pool: repos
     options: ""
-  - fqdn: yourhost.rsync.net
+  - id: rsync
+    fqdn: yourhost.rsync.net
     user: userid
     type: rsync.net
     home: ""
     pool: repos
     options: "--remote-path=borg1"
-  - fqdn: username.your-storagebox.de
+  - id: hetzner
+    fqdn: username.your-storagebox.de
     user: username
     type: hetzner
     home: ""
