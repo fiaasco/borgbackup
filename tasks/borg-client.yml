@@ -85,7 +85,6 @@
   delegate_to: localhost
   become: false
   with_items: "{{ borgbackup_servers }}"
-  when: authkeys.changed
   changed_when: false
   tags:
     - skip_ansible_lint
