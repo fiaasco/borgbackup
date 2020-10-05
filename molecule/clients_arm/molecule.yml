@@ -1,0 +1,60 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: clients-arm32v7-debian-9
+    image: arm32v7/debian:9
+    networks:
+      - name: clients-borg
+    groups:
+      - clients
+  - name: clients-server-arm32v7-debian-10
+    image: arm32v7/debian:10
+    networks:
+      - name: clients-borg
+    groups:
+      - borgbackup_servers
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+      gather_timeout: 30
+      interpreter_python: auto
+      jinja2_extensions: jinja2.ext.do
+      timeout: 30
+    ssh_connection:
+      pipelining: true
+  inventory:
+    group_vars:
+      all:
+        borgbackup_appendonly: true
+        borgbackup_servers:
+          - fqdn: clients-server-arm32v7-debian-10
+            user: borgds
+            type: normal
+            home: /var/backup/
+            pool: repos
+            options: ""
+        borgbackup_include:
+          - "/etc"
+          - "/root"
+          - "/var/log"
+          - "/home"
+    host_vars:
+      clients-arm32v7-debian-9:
+        borgbackup_passphrase: sdfqjqoais
+  lint:
+    name: ansible-lint
+    options:
+      x: ["204"]
+scenario:
+  name: clients_arm
+verifier:
+  name: testinfra
+  options:
+    verbose: true
+  lint:
+    name: flake8
