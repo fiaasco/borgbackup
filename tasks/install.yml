@@ -30,12 +30,13 @@
     - name: install | set borg binary path
       set_fact:
         borgbackup_binary: "/usr/local/bin/borg"
+        borgbackup_architecture: "{{ ansible_machine }}"
 
     - name: install | install borg binary from web
       get_url:
         dest: "{{ borgbackup_binary }}"
-        checksum: "{{ borgbackup_checksum }}"
+        checksum: "{{ borgbackup_release[borgbackup_architecture].checksum[borgbackup_version] }}"
         owner: "{{ borgbackup_owner }}"
         group: "{{ borgbackup_group }}"
         mode: "0755"
-        url: "{{ borgbackup_download_url }}"
+        url: "{{ borgbackup_release[borgbackup_architecture].url }}"
