@@ -1,11 +1,18 @@
 ---
-
-arch:
-  - amd64
-  - arm64
-
 language: python
 services: docker
+
+env:
+  - SCENARIO: default
+  - SCENARIO: centos
+  - SCENARIO: ubuntu
+  - SCENARIO: clients
+  - SCENARIO: lamp
+  - SCENARIO: multiple
+
+#  - SCENARIO: lamp
+#  - SCENARIO: extra_opts
+#  - SCENARIO: multiple
 
 install:
   - pip install -r requirements.txt
@@ -19,23 +26,3 @@ script:
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
-
-jobs:
-  include:
-    - os: linux
-      arch: arm64
-      env:
-        - SCENARIO: clients_arm
-    - os: linux
-      arch: amd64
-      env:
-        - SCENARIO: default
-        - SCENARIO: centos
-        - SCENARIO: ubuntu
-        - SCENARIO: clients
-        - SCENARIO: lamp
-        - SCENARIO: multiple
-     #  - SCENARIO: lamp
-     #  - SCENARIO: extra_opts
-     #  - SCENARIO: multiple
-    
