@@ -27,10 +27,19 @@ env:
   # - SCENARIO: multiple
 
 jobs:
-  include:
-    - arch: arm64
-      env: SCENARIO=clients_arm
   exclude:
+    # exclude jobs that should not be run on ARM
+    - arch: arm64
+      env: SCENARIO=default
+    - arch: arm64
+      env: SCENARIO=centos
+    - arch: arm64
+      env: SCENARIO=ubuntu
+    - arch: arm64
+      env: SCENARIO=lamp
+    - arch: arm64
+      env: SCENARIO=multiple
+    # exclude jobs that should not be run on AMD64
     - arch: amd64
       env: SCENARIO=clients_arm
 
