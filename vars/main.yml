@@ -1,6 +1,12 @@
 ---
 
 borgbackup_release:
+  aarch64:
+    url: "https://dl.bintray.com/borg-binary-builder/borg-binaries/borg-{{ borgbackup_version }}-arm64"
+    checksum:
+      1.1.10: "sha256:feef734f3c07e2f1a2850493652ec289fa2731aa2cd9b292fa92741bc915cbbd"
+      1.1.11: "sha256:fd6198503312f584506454414530b540fa0f48bd615d2306a9d868da979c7ca0"
+      1.1.13: "sha256:d942f2815cc6b8acbd6c0f08920160a6e850d9dbb84178af8b72f4eb9e5f9cae"
   armv7l:
     url: "https://dl.bintray.com/borg-binary-builder/borg-binaries/borg-{{ borgbackup_version }}-armv7"
     checksum:
