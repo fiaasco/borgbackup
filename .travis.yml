@@ -5,6 +5,7 @@ arch:
   - arm64
 
 language: python
+cache: pip
 services: docker
 
 install:
