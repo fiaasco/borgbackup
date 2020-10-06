@@ -28,12 +28,10 @@ env:
 
 jobs:
   include:
-    - os: linux
-      arch: arm64
+    - arch: arm64
       env: SCENARIO=clients_arm
   exclude:
-    - os: linux
-      arch: amd64
+    - arch: amd64
       env: SCENARIO=clients_arm
 
 script:
