@@ -6,10 +6,10 @@ env:
   - SCENARIO: default
   - SCENARIO: centos
   - SCENARIO: ubuntu
-  - SCENARIO: clients
   - SCENARIO: lamp
   - SCENARIO: multiple
 
+#  - SCENARIO: clients
 #  - SCENARIO: lamp
 #  - SCENARIO: extra_opts
 #  - SCENARIO: multiple
