@@ -10,24 +10,24 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-arm64v8-debian-9
-    image: arm64v8/debian:9
-    networks:
-      - name: clients-borg
-    groups:
-      - clients
+  #  - name: clients-arm64v8-debian-9
+  #    image: arm64v8/debian:9
+  #    networks:
+  #      - name: clients-borg
+  #    groups:
+  #      - clients
   - name: clients-arm32v7-debian-10
     image: arm32v7/debian:10
     networks:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-arm64v8-debian-10
-    image: arm64v8/debian:10
-    networks:
-      - name: clients-borg
-    groups:
-      - clients
+  #  - name: clients-arm64v8-debian-10
+  #    image: arm64v8/debian:10
+  #    networks:
+  #      - name: clients-borg
+  #    groups:
+  #      - clients
   - name: clients-server-arm32v7-debian-10
     image: arm32v7/debian:10
     networks:
