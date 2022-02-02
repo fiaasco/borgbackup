@@ -21,16 +21,16 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-ubuntu-xenial
-    hostname: clients-ubuntu-xenial
-    image: ubuntu:xenial
+  - name: clients-ubuntu-focal
+    hostname: clients-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-ubuntu-xenial-pkg
-    hostname: clients-ubuntu-xenial
-    image: ubuntu:xenial
+  - name: clients-ubuntu-focal-pkg
+    hostname: clients-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: clients-borg
     groups:
@@ -56,16 +56,16 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-debian-9
-    hostname: clients-debian-9
-    image: debian:9
+  - name: clients-debian-11
+    hostname: clients-debian-11
+    image: debian:11
     networks:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-debian-9-pkg
-    hostname: clients-debian-9
-    image: debian:9
+  - name: clients-debian-11-pkg
+    hostname: clients-debian-11
+    image: debian:11
     networks:
       - name: clients-borg
     groups:
@@ -173,9 +173,9 @@ provisioner:
       clients-ubuntu-bionic-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiexpkg
-      clients-ubuntu-xenial:
+      clients-ubuntu-focal:
         borgbackup_passphrase: ooFeila1ie
-      clients-ubuntu-xenial-pkg:
+      clients-ubuntu-focal-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ooFeila1iepkg
       clients-ubuntu-trusty:
@@ -185,9 +185,9 @@ provisioner:
       clients-debian-10-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: eewoo7paf6Jpkg
-      clients-debian-9:
+      clients-debian-11:
         borgbackup_passphrase: aef1Iekahpi
-      clients-debian-9-pkg:
+      clients-debian-11-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: aef1Iekahpipkg
       clients-debian-8:
