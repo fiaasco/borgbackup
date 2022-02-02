@@ -1,8 +1,11 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 platforms:
   - name: clients-ubuntu-bionic
     hostname: clients-ubuntu-bionic
@@ -208,15 +211,9 @@ provisioner:
       clients-fedora-31-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: sdfqjqoaispkg
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 scenario:
   name: clients
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8

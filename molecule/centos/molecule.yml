@@ -1,8 +1,11 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 scenario:
   name: centos
 platforms:
@@ -81,13 +84,7 @@ provisioner:
         borgbackup_passphrase: soo6Uabiex
       centos-management-centos-8:
         borgbackup_passphrase: 798uoknakjla
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8

@@ -1,10 +1,11 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: ${MOLECULE_PROJECT_DIRECTORY}/.yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 platforms:
   - name: multiple-client-debian-10
     hostname: multiple-client-debian-10
@@ -76,15 +77,9 @@ provisioner:
       multiple-server-ubuntu-bionic:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: oiasdfoain
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 scenario:
   name: multiple
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8

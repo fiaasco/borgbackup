@@ -1,8 +1,11 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 scenario:
   name: ubuntu
 platforms:
@@ -87,13 +90,7 @@ provisioner:
           - "/root"
           - "/var/log"
           - "/home"
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8
