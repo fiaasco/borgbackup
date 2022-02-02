@@ -7,36 +7,36 @@ lint: |
   ansible-lint --exclude molecule
   flake8
 scenario:
-  name: centos
+  name: rocky
 platforms:
-  - name: centos-client-centos-8
-    hostname: centos-client-centos-8
-    image: centos:8
+  - name: rocky-client-rocky-8
+    hostname: rocky-client-rocky-8
+    image: rockylinux/rockylinux:8
     networks:
-      - name: centos-borg
+      - name: rocky-borg
     groups:
-      - centos
+      - rocky
       - clients
-  - name: centos-server-centos-8
-    hostname: centos-server-centos-8
-    image: centos:8
+  - name: rocky-server-rocky-8
+    hostname: rocky-server-rocky-8
+    image: rockylinux/rockylinux:8
     command: /lib/systemd/systemd
     privileged: true
     networks:
-      - name: centos-borg
+      - name: rocky-borg
     groups:
-      - centos
+      - rocky
       - borgbackup_servers
-  - name: centos-management-centos-8
-    hostname: centos-management-centos-8
+  - name: rocky-management-rocky-8
+    hostname: rocky-management-rocky-8
     command: /lib/systemd/systemd
     privileged: true
-    image: centos:8
+    image: rockylinux/rockylinux:8
     networks:
-      - name: centos-borg
+      - name: rocky-borg
     groups:
       - borgbackup_management
-      - centos
+      - rocky
       - clients
 provisioner:
   name: ansible
@@ -54,7 +54,7 @@ provisioner:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: centos-server-centos-8
+          - fqdn: rocky-server-rocky-8
             user: borgds
             type: normal
             home: /var/backup/
@@ -66,7 +66,7 @@ provisioner:
           weekly: 4
           monthly: 6
           yearly: 1
-        borgbackup_management_station: centos-management-centos-8
+        borgbackup_management_station: rocky-management-rocky-8
         borgbackup_include:
           - "/etc"
           - "/root"
@@ -79,10 +79,10 @@ provisioner:
         borgbackup_management_sshkey: |
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
     host_vars:
-      centos-client-centos-8:
+      rocky-client-rocky-8:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiex
-      centos-management-centos-8:
+      rocky-management-rocky-8:
         borgbackup_passphrase: 798uoknakjla
 verifier:
   name: testinfra

@@ -4,7 +4,7 @@ services: docker
 
 env:
   - SCENARIO: default
-  - SCENARIO: centos
+  - SCENARIO: rocky
   - SCENARIO: ubuntu
   - SCENARIO: lamp
   - SCENARIO: multiple

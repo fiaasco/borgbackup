@@ -77,17 +77,17 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-centos-8
-    hostname: clients-centos-8
-    image: centos:8
+  - name: clients-rocky-8
+    hostname: clients-rocky-8
+    image: rockylinux/rockylinux:8
     networks:
       - name: clients-borg
     groups:
       - centos
       - clients
-  - name: clients-centos-8-pkg
-    hostname: clients-centos-8
-    image: centos:8
+  - name: clients-rocky-8-pkg
+    hostname: clients-rocky-8
+    image: rockylinux/rockylinux:8
     networks:
       - name: clients-borg
     groups:
@@ -192,10 +192,10 @@ provisioner:
         borgbackup_passphrase: aef1Iekahpipkg
       clients-debian-8:
         borgbackup_passphrase: aef1Iekasfs
-      clients-centos-8:
+      clients-rocky-8:
         ansible_python_interpreter: /usr/bin/python3
         borgbackup_passphrase: ASFQiejasdf
-      clients-centos-8-pkg:
+      clients-rocky-8-pkg:
         ansible_python_interpreter: /usr/bin/python3
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ASFQiejasdfpkg
