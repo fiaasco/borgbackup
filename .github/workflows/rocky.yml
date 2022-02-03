@@ -1,0 +1,40 @@
+---
+name: Rocky
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: borgbackup
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          cd borgbackup
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+      - name: Test with molecule
+        run: |
+          cd borgbackup
+          molecule --debug test --scenario-name rocky
+
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
