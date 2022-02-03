@@ -9,24 +9,24 @@ lint: |
 scenario:
   name: ubuntu
 platforms:
-  - name: ubuntu-client-ubuntu-bionic
-    hostname: ubuntu-client-ubuntu-bionic
-    image: ubuntu:bionic
+  - name: ubuntu-client-ubuntu-focal
+    hostname: ubuntu-client-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: ubuntu-borg
     groups:
       - clients
       - extra_opts
-  - name: ubuntu-server-ubuntu-bionic
-    hostname: ubuntu-server-ubuntu-bionic
-    image: ubuntu:bionic
+  - name: ubuntu-server-ubuntu-focal
+    hostname: ubuntu-server-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: ubuntu-borg
     groups:
       - borgbackup_servers
-  - name: ubuntu-management-ubuntu-bionic
-    hostname: ubuntu-management-ubuntu-bionic
-    image: ubuntu:bionic
+  - name: ubuntu-management-ubuntu-focal
+    hostname: ubuntu-management-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: ubuntu-borg
     groups:
@@ -36,7 +36,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       gather_timeout: 30
       interpreter_python: auto
       jinja2_extensions: jinja2.ext.do
@@ -48,7 +48,7 @@ provisioner:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: ubuntu-server-ubuntu-bionic
+          - fqdn: ubuntu-server-ubuntu-focal
             user: borgds
             type: normal
             home: /var/backup/
@@ -60,7 +60,7 @@ provisioner:
           weekly: 4
           monthly: 6
           yearly: 1
-        borgbackup_management_station: ubuntu-management-ubuntu-bionic
+        borgbackup_management_station: ubuntu-management-ubuntu-focal
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
@@ -68,7 +68,7 @@ provisioner:
         borgbackup_management_sshkey: |
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
     host_vars:
-      ubuntu-client-ubuntu-bionic:
+      ubuntu-client-ubuntu-focal:
         borgbackup_passphrase: soo6Uabiex
         borgbackup_include:
           - "/etc"
@@ -82,7 +82,7 @@ provisioner:
           - "dpkg --get-selections > /root/packages"
         borgbackup_post_commands:
           - "apt list"
-      ubuntu-management-ubuntu-bionic:
+      ubuntu-management-ubuntu-focal:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: 798uoknakjla
         borgbackup_include:

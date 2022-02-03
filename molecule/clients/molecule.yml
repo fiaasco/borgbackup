@@ -35,13 +35,6 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-ubuntu-trusty
-    hostname: clients-ubuntu-trusty
-    image: ubuntu:trusty
-    networks:
-      - name: clients-borg
-    groups:
-      - clients
   - name: clients-debian-10
     hostname: clients-debian-10
     image: debian:10
@@ -109,25 +102,17 @@ platforms:
     groups:
       - centos
       - clients
-  - name: clients-centos-6
-    hostname: clients-centos-6
-    image: centos:6
+  - name: clients-fedora-35
+    hostname: clients-fedora-35
+    image: fedora:35
     networks:
       - name: clients-borg
     groups:
       - centos
       - clients
-  - name: clients-fedora-31
-    hostname: clients-fedora-31
-    image: fedora:31
-    networks:
-      - name: clients-borg
-    groups:
-      - centos
-      - clients
-  - name: clients-fedora-31-pkg
-    hostname: clients-fedora-31-pkg
-    image: fedora:31
+  - name: clients-fedora-35-pkg
+    hostname: clients-fedora-35-pkg
+    image: fedora:35
     networks:
       - name: clients-borg
     groups:
@@ -144,7 +129,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       gather_timeout: 30
       interpreter_python: auto
       jinja2_extensions: jinja2.ext.do
@@ -178,8 +163,6 @@ provisioner:
       clients-ubuntu-focal-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ooFeila1iepkg
-      clients-ubuntu-trusty:
-        borgbackup_passphrase: ooFeilaasfd
       clients-debian-10:
         borgbackup_passphrase: eewoo7paf6J
       clients-debian-10-pkg:
@@ -204,11 +187,9 @@ provisioner:
       clients-centos-7-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ASFQiejwasdpkg
-      clients-centos-6:
-        borgbackup_passphrase: Ansdkfqooia
-      clients-fedora-31:
+      clients-fedora-35:
         borgbackup_passphrase: sdfqjqoais
-      clients-fedora-31-pkg:
+      clients-fedora-35-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: sdfqjqoaispkg
 scenario:
