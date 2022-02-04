@@ -1,6 +1,6 @@
 # Borg backup role
 
-![Debian](https://github.com/fiaasco/borgbackup/actions/workflows/debian.yml/badge.svg)
+![Debian](https://github.com/fiaasco/borgbackup/actions/workflows/default.yml/badge.svg)
 ![Ubuntu](https://github.com/fiaasco/borgbackup/actions/workflows/ubuntu.yml/badge.svg)
 ![Rocky](https://github.com/fiaasco/borgbackup/actions/workflows/rocky.yml/badge.svg)
 ![Multiple](https://github.com/fiaasco/borgbackup/actions/workflows/multiple.yml/badge.svg)
