@@ -1,35 +1,36 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: ${MOLECULE_PROJECT_DIRECTORY}/.yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 platforms:
-  - name: multiple-client-debian-10
-    hostname: multiple-client-debian-10
+  - name: multiple-client-debian-11
+    hostname: multiple-client-debian-11
     image: debian:10
     networks:
       - name: multiple-borg
     groups:
       - clients
-  - name: multiple-client-ubuntu-bionic
-    hostname: multiple-client-ubuntu-bionic
-    image: ubuntu:bionic
+  - name: multiple-client-ubuntu-focal
+    hostname: multiple-client-ubuntu-focal
+    image: ubuntu:focal
     groups:
       - clients
     networks:
       - name: multiple-borg
-  - name: multiple-server-debian-10
-    hostname: multiple-server-debian-10
-    image: debian:10
+  - name: multiple-server-debian-11
+    hostname: multiple-server-debian-11
+    image: debian:11
     networks:
       - name: multiple-borg
     groups:
       - borgbackup_servers
-  - name: multiple-server-ubuntu-bionic
-    hostname: multiple-server-ubuntu-bionic
-    image: ubuntu:bionic
+  - name: multiple-server-ubuntu-focal
+    hostname: multiple-server-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: multiple-borg
     groups:
@@ -38,7 +39,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       gather_timeout: 30
       interpreter_python: auto
       jinja2_extensions: jinja2.ext.do
@@ -50,13 +51,13 @@ provisioner:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: multiple-server-debian-10
+          - fqdn: multiple-server-debian-11
             user: borgdj
             type: normal
             home: /var/backup/
             pool: repos
             options: ""
-          - fqdn: multiple-server-ubuntu-bionic
+          - fqdn: multiple-server-ubuntu-focal
             user: borgux
             type: normal
             home: /var/backup/
@@ -68,23 +69,17 @@ provisioner:
           - "/var/log"
           - "/home"
     host_vars:
-      multiple-client-debian-10:
+      multiple-client-debian-11:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiex
-      multiple-client-ubuntu-bionic:
+      multiple-client-ubuntu-focal:
         borgbackup_passphrase: lidafruhkj
-      multiple-server-ubuntu-bionic:
+      multiple-server-ubuntu-focal:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: oiasdfoain
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 scenario:
   name: multiple
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8

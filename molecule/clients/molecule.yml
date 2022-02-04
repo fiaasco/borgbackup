@@ -1,8 +1,11 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 platforms:
   - name: clients-ubuntu-bionic
     hostname: clients-ubuntu-bionic
@@ -18,23 +21,16 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-ubuntu-xenial
-    hostname: clients-ubuntu-xenial
-    image: ubuntu:xenial
+  - name: clients-ubuntu-focal
+    hostname: clients-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-ubuntu-xenial-pkg
-    hostname: clients-ubuntu-xenial
-    image: ubuntu:xenial
-    networks:
-      - name: clients-borg
-    groups:
-      - clients
-  - name: clients-ubuntu-trusty
-    hostname: clients-ubuntu-trusty
-    image: ubuntu:trusty
+  - name: clients-ubuntu-focal-pkg
+    hostname: clients-ubuntu-focal
+    image: ubuntu:focal
     networks:
       - name: clients-borg
     groups:
@@ -53,16 +49,16 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-debian-9
-    hostname: clients-debian-9
-    image: debian:9
+  - name: clients-debian-11
+    hostname: clients-debian-11
+    image: debian:11
     networks:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-debian-9-pkg
-    hostname: clients-debian-9
-    image: debian:9
+  - name: clients-debian-11-pkg
+    hostname: clients-debian-11
+    image: debian:11
     networks:
       - name: clients-borg
     groups:
@@ -74,17 +70,17 @@ platforms:
       - name: clients-borg
     groups:
       - clients
-  - name: clients-centos-8
-    hostname: clients-centos-8
-    image: centos:8
+  - name: clients-rocky-8
+    hostname: clients-rocky-8
+    image: rockylinux/rockylinux:8
     networks:
       - name: clients-borg
     groups:
       - centos
       - clients
-  - name: clients-centos-8-pkg
-    hostname: clients-centos-8
-    image: centos:8
+  - name: clients-rocky-8-pkg
+    hostname: clients-rocky-8
+    image: rockylinux/rockylinux:8
     networks:
       - name: clients-borg
     groups:
@@ -106,25 +102,17 @@ platforms:
     groups:
       - centos
       - clients
-  - name: clients-centos-6
-    hostname: clients-centos-6
-    image: centos:6
+  - name: clients-fedora-35
+    hostname: clients-fedora-35
+    image: fedora:35
     networks:
       - name: clients-borg
     groups:
       - centos
       - clients
-  - name: clients-fedora-31
-    hostname: clients-fedora-31
-    image: fedora:31
-    networks:
-      - name: clients-borg
-    groups:
-      - centos
-      - clients
-  - name: clients-fedora-31-pkg
-    hostname: clients-fedora-31-pkg
-    image: fedora:31
+  - name: clients-fedora-35-pkg
+    hostname: clients-fedora-35-pkg
+    image: fedora:35
     networks:
       - name: clients-borg
     groups:
@@ -141,7 +129,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       gather_timeout: 30
       interpreter_python: auto
       jinja2_extensions: jinja2.ext.do
@@ -170,29 +158,27 @@ provisioner:
       clients-ubuntu-bionic-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: soo6Uabiexpkg
-      clients-ubuntu-xenial:
+      clients-ubuntu-focal:
         borgbackup_passphrase: ooFeila1ie
-      clients-ubuntu-xenial-pkg:
+      clients-ubuntu-focal-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ooFeila1iepkg
-      clients-ubuntu-trusty:
-        borgbackup_passphrase: ooFeilaasfd
       clients-debian-10:
         borgbackup_passphrase: eewoo7paf6J
       clients-debian-10-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: eewoo7paf6Jpkg
-      clients-debian-9:
+      clients-debian-11:
         borgbackup_passphrase: aef1Iekahpi
-      clients-debian-9-pkg:
+      clients-debian-11-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: aef1Iekahpipkg
       clients-debian-8:
         borgbackup_passphrase: aef1Iekasfs
-      clients-centos-8:
+      clients-rocky-8:
         ansible_python_interpreter: /usr/bin/python3
         borgbackup_passphrase: ASFQiejasdf
-      clients-centos-8-pkg:
+      clients-rocky-8-pkg:
         ansible_python_interpreter: /usr/bin/python3
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ASFQiejasdfpkg
@@ -201,22 +187,14 @@ provisioner:
       clients-centos-7-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: ASFQiejwasdpkg
-      clients-centos-6:
-        borgbackup_passphrase: Ansdkfqooia
-      clients-fedora-31:
+      clients-fedora-35:
         borgbackup_passphrase: sdfqjqoais
-      clients-fedora-31-pkg:
+      clients-fedora-35-pkg:
         borgbackup_install_from_pkg: true
         borgbackup_passphrase: sdfqjqoaispkg
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 scenario:
   name: clients
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8
