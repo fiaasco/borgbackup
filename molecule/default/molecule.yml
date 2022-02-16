@@ -1,29 +1,32 @@
 ---
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --exclude molecule
+  flake8
 scenario:
   name: default
 platforms:
-  - name: default-client-debian-10
-    hostname: default-client-debian-10
-    image: debian:10
+  - name: default-client-debian-11
+    hostname: default-client-debian-11
+    image: debian:11
     networks:
       - name: default-borg
     groups:
       - clients
       - extra_opts
-  - name: default-server-debian-10
-    hostname: default-server-debian-10
-    image: debian:10
+  - name: default-server-debian-11
+    hostname: default-server-debian-11
+    image: debian:11
     networks:
       - name: default-borg
     groups:
       - borgbackup_servers
-  - name: default-management-debian-10
-    hostname: default-management-debian-10
-    image: debian:10
+  - name: default-management-debian-11
+    hostname: default-management-debian-11
+    image: debian:11
     networks:
       - name: default-borg
     groups:
@@ -33,7 +36,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       gather_timeout: 30
       interpreter_python: auto
       jinja2_extensions: jinja2.ext.do
@@ -45,7 +48,7 @@ provisioner:
       all:
         borgbackup_appendonly: true
         borgbackup_servers:
-          - fqdn: default-server-debian-10
+          - fqdn: default-server-debian-11
             user: borgds
             type: normal
             home: /var/backup/
@@ -57,7 +60,7 @@ provisioner:
           weekly: 4
           monthly: 6
           yearly: 1
-        borgbackup_management_station: default-management-debian-10
+        borgbackup_management_station: default-management-debian-11
       borgbackup_servers:
         borgbackup_required: false
       borgbackup_management:
@@ -65,7 +68,7 @@ provisioner:
         borgbackup_management_sshkey: |
           ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXM5MuTbKbciopdHP314g0b72O5xaCf+4mt97bLPBwmW8UpOebWMkE+jYKET2B9fiOkyU9aWq+Tx7tfo31avN0nRf/VsxNupLcH605KdYOmw+EPjVDFLRXZb3j0AGDJM9YCd/KrwJlf8Tu4sXq0RhRNmqRBsBMjevpKCioQLzWJ1oCs1TLWxTS4nN7Jwy+Ou2gJEB7jKj907pFiCIPWRU4LLHlwE7DjunBr4THgE2Sj0tWkiYDKKoH++Rm62wVYL0oTLOJrQuqu52FEniPDgTnZwhy7b5MAHF5f2BscBorQxEkToWOVfX14Mzf+HC/arT2IPoE1Iv2XdWoiGiaWnyr
     host_vars:
-      default-client-debian-10:
+      default-client-debian-11:
         borgbackup_passphrase: soo6Uabiex
         borgbackup_include:
           - "/etc"
@@ -80,20 +83,14 @@ provisioner:
           - "dpkg --get-selections > /root/packages"
         borgbackup_post_commands:
           - "apt list"
-      default-management-debian-10:
+      default-management-debian-11:
         borgbackup_passphrase: 798uoknakjla
         borgbackup_include:
           - "/etc"
           - "/root"
           - "/var/log"
           - "/home"
-  lint:
-    name: ansible-lint
-    options:
-      x: ["204"]
 verifier:
   name: testinfra
   options:
     verbose: true
-  lint:
-    name: flake8

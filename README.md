@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.com/FiaasCo/borgbackup.svg?branch=master)](https://travis-ci.com/FiaasCo/borgbackup)
-
 # Borg backup role
+
+![Debian](https://github.com/fiaasco/borgbackup/actions/workflows/default.yml/badge.svg)
+![Ubuntu](https://github.com/fiaasco/borgbackup/actions/workflows/ubuntu.yml/badge.svg)
+![Rocky](https://github.com/fiaasco/borgbackup/actions/workflows/rocky.yml/badge.svg)
+![Multiple](https://github.com/fiaasco/borgbackup/actions/workflows/multiple.yml/badge.svg)
 
 This role installs Borg backup on borgbackup\_servers and clients. The role contains a wrapper-script 'borg-backup' to ease the usage on the client. Supported options include borg-backup info | init | list | backup | mount. Automysqlbackup will run as pre-backup command if it's installed.
 The role supports both self hosted and offsite backup-storage such as rsync.net and hetzner storage box as Borg server.

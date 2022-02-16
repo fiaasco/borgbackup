@@ -76,6 +76,8 @@ if [ "$1" = "init" ]; then
 fi
 
 if [ "$1" = "backup" ]; then
+    set -e
+
     DATE=$(date +%Y%m%d-%H%M)
     EXIT_CODE=0
 

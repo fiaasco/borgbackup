@@ -1,6 +1,6 @@
 ---
 - name: prepare debian-based systems
-  hosts: all:!centos
+  hosts: all:!centos:!rocky
   gather_facts: false
   tasks:
     - name: install required packages
@@ -23,8 +23,20 @@
           - iputils
           - openssh-clients
 
+- name: prepare rocky-based systems
+  hosts: rocky
+  gather_facts: false
+  tasks:
+    - name: install required packages
+      yum:
+        name:
+          - anacron
+          - iputils
+          - openssh-clients
+          - python3
+
 - name: prepare debian-based backupservers
-  hosts: borgbackup_servers:!centos
+  hosts: borgbackup_servers:!centos:!rocky
   gather_facts: false
   tasks:
     - name: install required packages
@@ -35,7 +47,7 @@
       command: service ssh start
 
 - name: prepare centos-based backupservers
-  hosts: borgbackup_servers:&centos
+  hosts: borgbackup_servers:&rocky
   gather_facts: false
   tasks:
     - name: install required packages

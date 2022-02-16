@@ -38,7 +38,9 @@
     mode: "0644"
   with_items: "{{ borgbackup_servers }}"
 
-- debug: msg="{{ sshkey.stdout }}"
+- name: debug ssh key
+  debug:
+    msg: "{{ sshkey.stdout }}"
 
 - name: client | put sshpubkey on the normal backupserver
   authorized_key:
