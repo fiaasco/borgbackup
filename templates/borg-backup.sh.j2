@@ -79,6 +79,7 @@ if [ "$1" = "backup" ]; then
     set -e
 
     DATE=$(date +%Y%m%d-%H%M)
+    EXIT_CODE=0
 
     # Running some commands pre-backup
 {% for precommand in borgbackup_pre_commands %}
@@ -94,7 +95,8 @@ if [ "$1" = "backup" ]; then
             {%- if automysql.stat.isdir is defined and automysql.stat.isdir | bool %} '/var/lib/automysqlbackup'{% endif %} \
             {% for dir in borgbackup_exclude %} --exclude '{{ dir }}'{% endfor %}
 
-        if [ "$?" -eq "0" ]; then echo "Backup succeeded on $DATE to {{ b.fqdn }}" >> /var/log/borg-backup.log; fi
+        EXIT_CODE="$?"
+        if [ "$EXIT_CODE" -eq "0" ]; then echo "Backup succeeded on $DATE to {{ b.fqdn }}" >> /var/log/borg-backup.log; fi
 
 {%     if not borgbackup_appendonly %}
         echo "Pruning old backups on {{ b.fqdn }} :"
