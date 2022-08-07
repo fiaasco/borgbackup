@@ -67,7 +67,7 @@
       authorized_key:
         user: "{{ ansible_user_id }}"
         key: "{{ sshkey.stdout }}"
-        key_options: 'command="cd {{ item.pool }}/{{ inventory_hostname }};/usr/local/bin/borg1 serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'  # noqa 204 (Line has to be this long for valid formatting)
+        key_options: 'command="borg-1.2 serve {% if borgbackup_appendonly %}--append-only {% endif %}--restrict-to-path {{ item.pool }}/{{ inventory_hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'  # noqa 204 (Line has to be this long for valid formatting)
         path: "/tmp/authkeys-{{ item.type }}-{{ item.fqdn }}-authkeys"
         manage_dir: false
       delegate_to: localhost
